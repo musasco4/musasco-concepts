@@ -47,7 +47,11 @@ function TestimonialCard({ item }: { item: TestimonialSlot }) {
  * the same four numbers in two places would work against "every section
  * should feel different," not for it.
  */
-export function TrustSection() {
+type TrustSectionProps = {
+  variant?: "contact" | "default";
+};
+
+export function TrustSection({ variant = "default" }: TrustSectionProps) {
   return (
     <Section background="subtle" ariaLabel="Trusted by businesses" className="py-12 md:py-16">
       <Container>

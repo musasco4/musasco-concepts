@@ -52,7 +52,7 @@ export function ContactOptions() {
                   
                   {isPhone && "whatsappHref" in option ? (
                     <div className="flex gap-2 mt-2 w-full">
-                      <Button href={option.href} variant="secondary" size="sm" className="flex-1">
+                      <Button href={option.href ?? undefined} variant="secondary" size="sm" className="flex-1">
                         Call Us
                       </Button>
                       <Button href={option.whatsappHref} variant="primary" size="sm" className="flex-1">
