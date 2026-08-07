@@ -2,7 +2,7 @@ export const contactHero = {
   eyebrow: "CONTACT US",
   headline: "Let's Start the Conversation.",
   subheadline:
-    "Whether you're ready to book a consultation or just have a question about the Growth System™, we're here to help.",
+    "Whether you're ready to book a Growth call or just have a question about the Growth System™, we're here to help.",
   trustMicrocopy: "We typically respond within 24 hours during business days.",
 };
 
@@ -69,9 +69,9 @@ export const contactForm = {
 
 export const scheduling = {
   headline: "Prefer to Book Directly?",
-  subheadline: "Skip the form and schedule a 30-minute Growth Consultation at a time that works for you.",
+  subheadline: "Skip the form and schedule a 30-minute Growth Call at a time that works for you.",
   placeholderText: "Loading scheduling widget...",
-  ctaLabel: "Book Your Free Consultation",
+  ctaLabel: "Build Your Growth System",
 };
 
 export const contactFaq = {
@@ -82,8 +82,8 @@ export const contactFaq = {
       answer: "A member of our growth team will review your inquiry and reach out within 24 hours to schedule a brief discovery call or answer your questions directly.",
     },
     {
-      question: "Is the Growth Consultation really free?",
-      answer: "Yes. The initial consultation is completely free and carries no obligation. It's designed to see if our Growth System™ is a good fit for your business.",
+      question: "Is the Growth Call really free?",
+      answer: "Yes. The initial Growth Call is completely free and carries no obligation. It's designed to see if our Growth System™ is a good fit for your business.",
     },
     {
       question: "Do you work with businesses outside Nigeria?",

@@ -12,7 +12,7 @@ export const hero = {
   headline: "Growth, Engineered.",
   subheadline:
     "MUSASCO Concepts helps growing businesses attract more customers, convert more of them, and scale what works — through one system, not scattered vendors.",
-  ctaPrimaryLabel: "Book a Growth Consultation",
+  ctaPrimaryLabel: "Build Your Growth System",
   ctaSecondaryLabel: "Start a Free Audit",
 };
 
@@ -258,11 +258,11 @@ export const blueprintCallout = {
     "A one-time, custom roadmap that applies the Growth System™ to your specific business — which engine to fix first, and why. No long-term commitment. Just clarity.",
   ctaLabel: "Get My Growth Blueprint",
   ctaHref: "/growth-blueprint",
-  skipLabel: "Already know what you need? Book a Consultation instead",
+  skipLabel: "Already know what you need? Start Growing",
   skipHref: "/contact",
 };
 
 export const finalCta = {
   headline: "Let's Build Your Growth System.",
-  subheadline: "Book a free consultation — no pressure, no obligation, just a clear next step.",
+  subheadline: "Book a free Growth Call — no pressure, no obligation, just a clear next step.",
 };

@@ -8,7 +8,7 @@ import { scheduling } from "@/lib/content/contact";
 
 export function SchedulingPlaceholder() {
   return (
-    <Section background="subtle" ariaLabel="Schedule Consultation">
+    <Section background="subtle" ariaLabel="Schedule a Growth call">
       <Container narrow>
         <RevealOnScroll>
           <Card

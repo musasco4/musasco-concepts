@@ -30,7 +30,7 @@ export function CalBookingWidget() {
         <Calendar className="mb-4 size-12 text-charcoal-300" />
         <p className="mb-6 text-charcoal-600">Unable to load the scheduling widget.</p>
         <Button href={CAL_URL} target="_blank" rel="noopener noreferrer" variant="secondary">
-          Book Your Free Consultation
+          Build Your Growth System
         </Button>
       </div>
     );
@@ -51,7 +51,7 @@ export function CalBookingWidget() {
         width="100%"
         height="100%"
         frameBorder="0"
-        title="Schedule a Growth Consultation"
+        title="Schedule a Growth Call"
         className="absolute inset-0 h-full w-full"
         onLoad={() => setLoaded(true)}
         onError={() => setError(true)}

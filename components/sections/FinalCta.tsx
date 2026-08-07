@@ -21,7 +21,7 @@ export function FinalCta() {
           <p className="mt-3 text-charcoal-300">{finalCta.subheadline}</p>
           <div className="mt-8 flex w-full flex-col gap-4 sm:w-auto sm:flex-row">
             <Button href="/contact" size="lg" className="w-full sm:w-auto">
-              Book a Growth Consultation
+              Build Your Growth System
             </Button>
             <Button href="/audit" variant="ghostOnDark" size="lg" className="w-full sm:w-auto">
               Start a Free Audit

@@ -20,7 +20,7 @@ import { ContactFaq } from "@/components/sections/contact/ContactFaq";
 export const metadata: Metadata = {
   title: "Contact Us | MUSASCO Concepts",
   description:
-    "Get in touch with MUSASCO Concepts. Book a free Growth Consultation, send us a message, or schedule a call to discuss your business growth goals.",
+    "Get in touch with MUSASCO Concepts. Build Your Growth System, send us a message, or schedule a call to discuss your business growth goals.",
   alternates: {
     canonical: "/contact",
   },
@@ -38,7 +38,7 @@ export default function ContactPage() {
         <ContactOptions />
         
         {/* Primary Conversion Section: Two Column Layout */}
-        <Section background="subtle" ariaLabel="Book a consultation or send a message" className="py-16 md:py-24">
+        <Section background="subtle" ariaLabel="Build Your Growth System or send a message" className="py-16 md:py-24">
           <Container>
             <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12 items-start">
               

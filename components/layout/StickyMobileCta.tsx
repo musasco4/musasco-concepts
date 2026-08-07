@@ -34,7 +34,7 @@ export function StickyMobileCta({ heroId = "hero" }: { heroId?: string }) {
       aria-label="Quick actions"
     >
       <Button href="/contact" className="flex-1">
-        Book Consultation
+        Start Growing
       </Button>
       <Link
         href="https://wa.me/000000000000"
