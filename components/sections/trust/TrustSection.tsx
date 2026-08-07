@@ -4,8 +4,7 @@ import { Section } from "@/components/ui/Section";
 import { Container } from "@/components/ui/Container";
 import { Card } from "@/components/ui/Card";
 import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
-import { Marquee } from "@/components/ui/Marquee";
-import { LogoMark } from "@/components/ui/LogoMark";
+
 import { Carousel } from "@/components/ui/Carousel";
 import { trustSection, type TestimonialSlot } from "@/lib/content/homepage";
 
@@ -47,11 +46,9 @@ function TestimonialCard({ item }: { item: TestimonialSlot }) {
  * the same four numbers in two places would work against "every section
  * should feel different," not for it.
  */
-type TrustSectionProps = {
-  variant?: "contact" | "default";
-};
 
-export function TrustSection({ variant = "default" }: TrustSectionProps) {
+
+export function TrustSection() {
   return (
     <Section background="subtle" ariaLabel="Trusted by businesses" className="py-12 md:py-16">
       <Container>

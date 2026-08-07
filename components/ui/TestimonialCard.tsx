@@ -1,8 +1,8 @@
 import { Card } from "@/components/ui/Card";
 import { Quote } from "lucide-react";
-import type { Testimonial } from "@/data/homepageTestimonials";
+import type { TestimonialSlot } from "@/lib/content/homepage";
 
-export function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
+export function TestimonialCard({ testimonial }: { testimonial: TestimonialSlot }) {
   return (
     <Card 
       variant="raised" 

@@ -33,7 +33,7 @@ export default function ContactPage() {
       <main id="main-content">
         <ContactHero />
         {/* Pass variant="contact" to use contact-specific copy */}
-        <TrustSection variant="contact" />
+        <TrustSection />
          
         <ContactOptions />
         

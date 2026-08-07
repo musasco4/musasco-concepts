@@ -71,7 +71,14 @@ export const trustStrip: Stat[] = [
  * name/company/headline), not a filled-in-sounding fake quote. Swap in
  * real copy the moment it exists; no component change needed.
  */
-export type TestimonialSlot = { stars: number; quote: string };
+export type TestimonialSlot = {
+  stars: number;
+  quote: string;
+  author?: string;
+  role?: string;
+  company?: string;
+  image?: string;
+};
 
 export const trustSection = {
   intro: "Built in Lagos — serving growth-focused businesses across Nigeria, the UK, and Europe.",
