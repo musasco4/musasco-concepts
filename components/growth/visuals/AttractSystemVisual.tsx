@@ -1,7 +1,5 @@
 "use client";
 
-// Removed unused cn import
-
 const SOURCES = ["Google Ads", "Meta Ads", "Organic Search", "Referrals"];
 
 export function AttractSystemVisual() {
@@ -13,24 +11,23 @@ export function AttractSystemVisual() {
         backgroundSize: '24px 24px'
       }} />
 
-      <div className="absolute inset-0 flex items-center justify-between px-6 lg:px-12">
-        
+      {/* Desktop Layout */}
+      <div className="hidden lg:flex absolute inset-0 items-center justify-between px-12">
         {/* Column 1: Traffic Sources */}
         <div className="flex flex-col gap-4 z-10">
           {SOURCES.map((source, i) => (
             <div key={source} className="flex items-center gap-2 group">
               <div className="size-2 rounded-full bg-charcoal-300 group-hover:bg-emerald-500 transition-colors" />
               <span className="text-xs font-medium text-charcoal-600 whitespace-nowrap">{source}</span>
-              {/* Animated Signal Line */}
-              <div className="hidden lg:block w-12 h-0.5 bg-charcoal-100 relative overflow-hidden">
+              <div className="w-12 h-0.5 bg-charcoal-100 relative overflow-hidden">
                 <div className="absolute inset-0 bg-emerald-500 animate-flow-right" style={{ animationDelay: `${i * 0.2}s` }} />
               </div>
             </div>
           ))}
         </div>
 
-        {/* Column 2: Acquisition System (Targeting/Creative) */}
-        <div className="hidden lg:flex flex-col items-center gap-2 z-10">
+        {/* Column 2: Acquisition System */}
+        <div className="flex flex-col items-center gap-2 z-10">
           <div className="px-4 py-2 rounded-md border border-emerald-200 bg-emerald-50 text-emerald-700 text-xs font-bold uppercase tracking-wide shadow-sm">
             Targeting & Creative
           </div>
@@ -43,7 +40,7 @@ export function AttractSystemVisual() {
         </div>
 
         {/* Column 3: Landing Page */}
-        <div className="hidden lg:flex flex-col items-center gap-2 z-10">
+        <div className="flex flex-col items-center gap-2 z-10">
            <div className="w-0.5 h-16 bg-charcoal-200 relative overflow-hidden">
              <div className="absolute inset-0 bg-emerald-500 animate-flow-down delay-300" />
            </div>
@@ -52,8 +49,8 @@ export function AttractSystemVisual() {
            </div>
         </div>
 
-        {/* Column 4: Output (Leads) */}
-        <div className="flex flex-col items-end gap-2 z-10 ml-auto lg:ml-0">
+        {/* Column 4: Output */}
+        <div className="flex flex-col items-end gap-2 z-10">
           <div className="text-right">
             <p className="text-xs font-bold text-charcoal-900 uppercase tracking-wide">Qualified</p>
             <p className="text-xs font-bold text-emerald-600 uppercase tracking-wide">Opportunities</p>
@@ -64,18 +61,40 @@ export function AttractSystemVisual() {
             ))}
           </div>
         </div>
-
       </div>
 
-      {/* Mobile Simplified Flow Overlay */}
-      <div className="lg:hidden absolute inset-0 flex flex-col items-center justify-center gap-4 bg-white/80 backdrop-blur-sm">
-         <div className="text-xs font-bold text-charcoal-500 uppercase">Traffic Sources</div>
-         <div className="w-0.5 h-8 bg-emerald-500 animate-flow-down" />
-         <div className="px-4 py-2 rounded border border-emerald-200 bg-emerald-50 text-emerald-700 text-xs font-bold">Acquisition System</div>
-         <div className="w-0.5 h-8 bg-emerald-500 animate-flow-down" />
-         <div className="px-4 py-2 rounded border-2 border-charcoal-900 bg-white text-charcoal-900 text-xs font-bold">Landing Page</div>
-         <div className="w-0.5 h-8 bg-emerald-500 animate-flow-down" />
-         <div className="text-xs font-bold text-emerald-600 uppercase">Leads Generated</div>
+      {/* Mobile Layout (Vertical Flow with detailed steps) */}
+      <div className="lg:hidden absolute inset-0 flex flex-col items-center justify-center p-4 gap-3">
+        <div className="text-[10px] font-bold text-charcoal-500 uppercase tracking-wide">Traffic Sources</div>
+        <div className="grid grid-cols-2 gap-1.5 w-full max-w-[200px]">
+          {SOURCES.map(source => (
+            <div key={source} className="text-[9px] text-center text-charcoal-600 bg-charcoal-50 rounded py-1">{source}</div>
+          ))}
+        </div>
+        
+        <div className="w-0.5 h-4 bg-emerald-500 animate-flow-down" />
+        
+        <div className="flex flex-col items-center gap-1.5 w-full max-w-[200px]">
+          <div className="px-3 py-1.5 rounded border border-emerald-200 bg-emerald-50 text-emerald-700 text-[9px] font-bold text-center w-full uppercase tracking-wide">
+            Targeting & Creative
+          </div>
+          <div className="w-0.5 h-3 bg-emerald-500 animate-flow-down" />
+          <div className="px-3 py-1.5 rounded border border-emerald-200 bg-emerald-50 text-emerald-700 text-[9px] font-bold text-center w-full uppercase tracking-wide">
+            Campaign Engine
+          </div>
+        </div>
+        
+        <div className="w-0.5 h-4 bg-emerald-500 animate-flow-down" />
+        
+        <div className="px-3 py-1.5 rounded border-2 border-charcoal-900 bg-white text-charcoal-900 text-[9px] font-bold text-center w-full max-w-[200px] uppercase tracking-wide">
+          Landing Page
+        </div>
+        
+        <div className="w-0.5 h-4 bg-emerald-500 animate-flow-down" />
+        
+        <div className="text-[10px] font-bold text-emerald-600 uppercase tracking-wide text-center">
+          Qualified Opportunities
+        </div>
       </div>
 
       <style jsx global>{`
