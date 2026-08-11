@@ -28,10 +28,6 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => {
-    setMobileOpen(false);
-  }, [pathname]);
-
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";
     const basePath = href.split("#")[0];
@@ -102,6 +98,7 @@ export function Header() {
               <Link 
                 key={link.name} 
                 href={link.href} 
+                onClick={() => setMobileOpen(false)}
                 className={cn(
                   "text-base font-medium",
                   isActive(link.href) ? "text-emerald-400" : "text-white"
@@ -111,10 +108,10 @@ export function Header() {
               </Link>
             ))}
             <div className="mt-4 flex flex-col gap-4 border-t border-white/20 pt-6">
-              <Button href="/contact" variant="primary" className="w-full">
+              <Button href="/contact" variant="primary" className="w-full" onClick={() => setMobileOpen(false)}>
                 Build Your Growth System
               </Button>
-              <Link href="/contact" className="text-center text-sm font-medium text-emerald-300">
+              <Link href="/contact" onClick={() => setMobileOpen(false)} className="text-center text-sm font-medium text-emerald-300">
                 or start with a free Growth Audit
               </Link>
             </div>

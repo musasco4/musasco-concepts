@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import { Section } from "@/components/ui/Section"; // Note: Section import might be unused if using raw section tag, but kept for consistency if needed elsewhere. Actually, this component uses raw <section>. I will remove unused imports if any.
+// Removed unused Section import
 import { Container } from "@/components/ui/Container";
 import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
 import { growthProcess } from "@/lib/content/growthSystem";
 import { cn } from "@/lib/utils";
-import { AlertTriangle, LayoutGrid, Link2, RefreshCw, ArrowRight } from "lucide-react";
+import { AlertTriangle, LayoutGrid, RefreshCw, ArrowRight } from "lucide-react"; // Removed Link2
 
 // --- Visualization Components for each Stage ---
 
@@ -58,7 +58,7 @@ function BlueprintVisual() {
           { label: "LANDING PAGE", delay: "0.2s" },
           { label: "LEAD CAPTURE", delay: "0.4s" },
           { label: "CUSTOMER JOURNEY", delay: "0.6s" },
-        ].map((item, i) => (
+        ].map((item) => ( // Removed unused index i
           <div key={item.label} className="flex items-center gap-4 animate-slide-in-right" style={{ animationDelay: item.delay }}>
             <div className="size-3 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
             <div className="h-0.5 flex-1 bg-gradient-to-r from-emerald-500 to-transparent" />
@@ -91,13 +91,13 @@ function BuildVisual() {
       }} />
       
       <div className="relative z-10 flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12 w-full max-w-4xl px-4">
-        {engines.map((engine, i) => (
+        {engines.map((engine) => ( // Removed unused index i, using engine.delay instead
           <div key={engine.id} className="flex flex-col items-center gap-4 md:gap-0 md:flex-row w-full md:w-auto">
             
             {/* Engine Card */}
             <div 
               className={cn(
-                "w-full md:w-48 p-4 rounded-xl border-2 bg-charcoal-800 flex flex-col items-center justify-center text-center transition-all duration-700 ease-out",
+                "w-full md:w-48 p-4 rounded-xl border-2 bg-charcoal-800 flex flex-col items-center justify-center text-center transition-all duration-700 ease-out relative",
                 "opacity-0 translate-y-4", // Initial state for animation
               )}
               style={{
@@ -114,7 +114,7 @@ function BuildVisual() {
             </div>
 
             {/* Connector Arrow (Between cards only) */}
-            {i < engines.length - 1 && (
+            {engine.id !== "scale" && (
               <div className="hidden md:flex items-center justify-center w-12 relative">
                 <div className="w-full h-0.5 bg-charcoal-600 relative overflow-hidden">
                   <div 
@@ -127,7 +127,7 @@ function BuildVisual() {
             )}
             
             {/* Mobile Connector */}
-            {i < engines.length - 1 && (
+            {engine.id !== "scale" && (
               <div className="md:hidden w-0.5 h-8 bg-charcoal-600 relative overflow-hidden">
                  <div 
                     className="absolute inset-0 bg-emerald-500 animate-signal-travel-vertical"
@@ -325,11 +325,16 @@ export function GrowthProcessSection() {
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const sectionRef = useRef<HTMLDivElement>(null);
   const [hasEntered, setHasEntered] = useState(false);
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  
+  // Fix: Initialize prefersReducedMotion lazily to avoid synchronous setState in effect
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  });
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setPrefersReducedMotion(mediaQuery.matches);
+    
     const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
     mediaQuery.addEventListener("change", handler);
     return () => mediaQuery.removeEventListener("change", handler);
