@@ -1,9 +1,8 @@
 import { cn } from "@/lib/utils";
 
 /**
- * Container — implements the Grid System (Design System §4): a 1440px max-width
- * content area with 64px desktop / 24px mobile margins. `narrow` uses the
- * 800px reading-width container reserved for long-form text.
+ * Container — implements the Grid System:
+ * 1440px maximum content width with responsive horizontal padding.
  */
 export function Container({
   children,
@@ -19,7 +18,7 @@ export function Container({
   return (
     <Tag
       className={cn(
-        "mx-auto px-6 md:px-8 lg:px-16",
+        "mx-auto w-full min-w-0 px-6 md:px-8 lg:px-16",
         narrow ? "max-w-[800px]" : "max-w-[1440px]",
         className
       )}
