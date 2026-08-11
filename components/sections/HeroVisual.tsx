@@ -31,6 +31,24 @@ export function HeroVisual() {
         },
       };
 
+  const cardVariants: Variants = reduceMotion
+    ? {
+        hidden: { opacity: 1, y: 0, scale: 1 },
+        visible: { opacity: 1, y: 0, scale: 1 },
+      }
+    : {
+        hidden: { opacity: 0, y: 12, scale: 0.98 },
+        visible: {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          transition: {
+            duration: 0.5,
+            ease: [0.16, 1, 0.3, 1],
+          },
+        },
+      };
+
   return (
     <motion.div
       initial="hidden"
@@ -56,7 +74,6 @@ export function HeroVisual() {
         <div className="absolute left-[10%] top-[35%] size-40 rounded-full bg-emerald-500/10 blur-[80px]" />
         <div className="absolute right-[5%] top-[20%] size-48 rounded-full bg-emerald-500/10 blur-[100px]" />
 
-        {/* Decorative connection lines */}
         <svg
           className="absolute inset-0 h-full w-full opacity-40"
           viewBox="0 0 800 600"
@@ -89,14 +106,25 @@ export function HeroVisual() {
       ========================================================= */}
 
       <div className="relative z-10 w-full min-w-0 overflow-hidden rounded-2xl border border-white/10 bg-[#101314]/95 shadow-[0_20px_80px_rgba(0,0,0,0.45)]">
+
         {/* Dashboard Header */}
         <div className="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-3 sm:px-5 sm:py-4">
           <div className="flex min-w-0 items-center gap-2">
-            <span
-              className={[
-                "size-2 shrink-0 rounded-full bg-emerald-400",
-                !reduceMotion ? "animate-pulse" : "",
-              ].join(" ")}
+            <motion.span
+              className="size-2 shrink-0 rounded-full bg-emerald-400"
+              animate={
+                reduceMotion
+                  ? undefined
+                  : {
+                      opacity: [0.35, 1, 0.35],
+                      scale: [0.9, 1.15, 0.9],
+                    }
+              }
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
             />
 
             <span className="truncate text-[10px] font-bold tracking-[0.14em] text-white sm:text-xs">
@@ -106,18 +134,39 @@ export function HeroVisual() {
 
           <div className="flex shrink-0 items-center gap-1.5 text-[9px] text-charcoal-400 sm:text-[10px]">
             <span>Live</span>
-            <span className="size-1.5 rounded-full bg-emerald-400" />
+
+            <motion.span
+              className="size-1.5 rounded-full bg-emerald-400"
+              animate={
+                reduceMotion
+                  ? undefined
+                  : {
+                      opacity: [0.4, 1, 0.4],
+                    }
+              }
+              transition={{
+                duration: 1.8,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+
             <span className="hidden sm:inline">System Active</span>
           </div>
         </div>
 
         {/* Dashboard Content */}
         <div className="space-y-3 p-3 sm:space-y-4 sm:p-4">
+
           {/* =====================================================
               TOP ROW
           ===================================================== */}
 
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+          <motion.div
+            variants={cardVariants}
+            className="grid grid-cols-1 gap-3 sm:grid-cols-3"
+          >
+            {/* Growth Score */}
             <DashboardCard
               title="Growth Score"
               icon={<Activity className="size-4" />}
@@ -127,6 +176,7 @@ export function HeroVisual() {
                   <span className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
                     82
                   </span>
+
                   <span className="ml-1 text-xs text-charcoal-500">
                     /100
                   </span>
@@ -138,9 +188,10 @@ export function HeroVisual() {
                 </span>
               </div>
 
-              <MiniLineChart />
+              <MiniLineChart reduceMotion={reduceMotion} />
             </DashboardCard>
 
+            {/* Pipeline Health */}
             <DashboardCard
               title="Pipeline Health"
               icon={<HeartPulse className="size-4" />}
@@ -150,12 +201,27 @@ export function HeroVisual() {
                   Healthy
                 </span>
 
-                <HeartPulse className="size-5 text-emerald-400" />
+                <motion.div
+                  animate={
+                    reduceMotion
+                      ? undefined
+                      : {
+                          scale: [1, 1.12, 1],
+                        }
+                  }
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                >
+                  <HeartPulse className="size-5 text-emerald-400" />
+                </motion.div>
               </div>
 
               <div className="mt-4 grid grid-cols-5 gap-1.5">
                 {[1, 1, 1, 1, 0].map((active, index) => (
-                  <span
+                  <motion.span
                     key={index}
                     className={[
                       "h-2 rounded-full",
@@ -163,11 +229,25 @@ export function HeroVisual() {
                         ? "bg-emerald-400"
                         : "bg-charcoal-700",
                     ].join(" ")}
+                    animate={
+                      reduceMotion || !active
+                        ? undefined
+                        : {
+                            opacity: [0.55, 1, 0.55],
+                          }
+                    }
+                    transition={{
+                      duration: 1.5,
+                      delay: index * 0.12,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
                   />
                 ))}
               </div>
             </DashboardCard>
 
+            {/* Opportunity Score */}
             <DashboardCard
               title="Opportunity Score"
               icon={<Target className="size-4" />}
@@ -177,22 +257,39 @@ export function HeroVisual() {
                   High
                 </span>
 
-                <span className="rounded-full bg-emerald-500/10 px-2 py-1 text-[8px] font-bold uppercase tracking-wide text-emerald-400">
+                <motion.span
+                  className="rounded-full bg-emerald-500/10 px-2 py-1 text-[8px] font-bold uppercase tracking-wide text-emerald-400"
+                  animate={
+                    reduceMotion
+                      ? undefined
+                      : {
+                          opacity: [0.65, 1, 0.65],
+                        }
+                  }
+                  transition={{
+                    duration: 2.2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                >
                   Prioritised
-                </span>
+                </motion.span>
               </div>
 
               <p className="mt-3 text-[10px] leading-relaxed text-charcoal-400">
                 Clear next growth lever identified
               </p>
             </DashboardCard>
-          </div>
+          </motion.div>
 
           {/* =====================================================
               MIDDLE ROW
           ===================================================== */}
 
-          <div className="grid grid-cols-1 gap-3 lg:grid-cols-[1.15fr_0.85fr]">
+          <motion.div
+            variants={cardVariants}
+            className="grid grid-cols-1 gap-3 lg:grid-cols-[1.15fr_0.85fr]"
+          >
             {/* Customer Journey */}
             <DashboardCard title="Customer Journey">
               <p className="text-[10px] text-charcoal-400">
@@ -201,116 +298,181 @@ export function HeroVisual() {
 
               <div className="mt-6 flex items-center justify-between gap-2">
                 <JourneyNode label="Visit" />
-                <JourneyLine />
+
+                <JourneyLine reduceMotion={reduceMotion} />
+
                 <JourneyNode label="Enquire" />
-                <JourneyLine />
+
+                <JourneyLine reduceMotion={reduceMotion} />
+
                 <JourneyNode label="Customer" active />
               </div>
             </DashboardCard>
 
             {/* Revenue Trend */}
             <DashboardCard title="Revenue Trend">
-              <div className="flex items-end justify-between">
+              <div className="flex items-end justify-between gap-3">
                 <div>
                   <p className="text-[10px] text-charcoal-400">
-                    This month
+                    Revenue tracked
                   </p>
 
                   <p className="mt-1 text-2xl font-semibold text-white">
-                    ₦24.8M
-                  </p>
+  $24.8K
+</p>
                 </div>
 
-                <span className="text-[10px] font-semibold text-emerald-400">
+                <span className="shrink-0 text-[10px] font-semibold text-emerald-400">
                   ↗ 18%
                 </span>
               </div>
 
               <RevenueChart reduceMotion={reduceMotion} />
             </DashboardCard>
-          </div>
+          </motion.div>
 
           {/* =====================================================
               BOTTOM ROW
           ===================================================== */}
 
           <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+
             {/* Campaign Health */}
-            <DashboardCard title="Campaign Health">
-              <div className="flex items-center gap-2">
-                <span
-                  className={[
-                    "size-2 rounded-full bg-emerald-400",
-                    !reduceMotion ? "animate-pulse" : "",
-                  ].join(" ")}
-                />
+            <motion.div variants={cardVariants}>
+              <DashboardCard title="Campaign Health">
+                <div className="flex items-center gap-2">
+                  <motion.span
+                    className="size-2 rounded-full bg-emerald-400"
+                    animate={
+                      reduceMotion
+                        ? undefined
+                        : {
+                            opacity: [0.4, 1, 0.4],
+                          }
+                    }
+                    transition={{
+                      duration: 1.6,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
+                  />
 
-                <span className="text-xs font-medium text-white">
-                  Optimising
-                </span>
-              </div>
+                  <span className="text-xs font-medium text-white">
+                    Optimising
+                  </span>
+                </div>
 
-              <div className="mt-4">
-                <p className="text-[9px] text-charcoal-500">
-                  ROAS
-                </p>
+                <div className="mt-4">
+                  <p className="text-[9px] text-charcoal-500">
+                    ROAS
+                  </p>
 
-                <p className="mt-1 text-sm font-semibold text-white">
-                  3.6x
-                </p>
-              </div>
+                  <p className="mt-1 text-sm font-semibold text-white">
+                    3.6x
+                  </p>
+                </div>
 
-              <div className="mt-3 h-1 rounded-full bg-charcoal-700">
-                <div className="h-full w-[78%] rounded-full bg-emerald-400" />
-              </div>
-            </DashboardCard>
+                <div className="mt-3 h-1 overflow-hidden rounded-full bg-charcoal-700">
+                  <motion.div
+                    className="h-full rounded-full bg-emerald-400"
+                    initial={{ width: 0 }}
+                    animate={{ width: "78%" }}
+                    transition={{
+                      duration: 1.2,
+                      delay: 0.6,
+                      ease: [0.16, 1, 0.3, 1],
+                    }}
+                  />
+                </div>
+              </DashboardCard>
+            </motion.div>
 
             {/* Tracking */}
-            <DashboardCard title="Tracking">
-              <div className="flex items-center gap-2">
-                <span className="size-2 rounded-full bg-emerald-400" />
-                <span className="text-xs font-medium text-white">
-                  Connected
-                </span>
-              </div>
+            <motion.div variants={cardVariants}>
+              <DashboardCard title="Tracking">
+                <div className="flex items-center gap-2">
+                  <motion.span
+                    className="size-2 rounded-full bg-emerald-400"
+                    animate={
+                      reduceMotion
+                        ? undefined
+                        : {
+                            scale: [1, 1.25, 1],
+                          }
+                    }
+                    transition={{
+                      duration: 1.8,
+                      repeat: Infinity,
+                    }}
+                  />
 
-              <p className="mt-3 text-[9px] leading-relaxed text-charcoal-400">
-                All systems tracking
-              </p>
+                  <span className="text-xs font-medium text-white">
+                    Connected
+                  </span>
+                </div>
 
-              <Layers3 className="mt-4 size-5 text-charcoal-400" />
-            </DashboardCard>
+                <p className="mt-3 text-[9px] leading-relaxed text-charcoal-400">
+                  All systems tracking
+                </p>
+
+                <Layers3 className="mt-4 size-5 text-charcoal-400" />
+              </DashboardCard>
+            </motion.div>
 
             {/* CRM */}
-            <DashboardCard title="CRM">
-              <div className="flex items-center gap-2">
-                <span className="size-2 rounded-full bg-emerald-400" />
+            <motion.div variants={cardVariants}>
+              <DashboardCard title="CRM">
+                <div className="flex items-center gap-2">
+                  <motion.span
+                    className="size-2 rounded-full bg-emerald-400"
+                    animate={
+                      reduceMotion
+                        ? undefined
+                        : {
+                            opacity: [0.4, 1, 0.4],
+                          }
+                    }
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                    }}
+                  />
 
-                <span className="text-xs font-medium text-white">
-                  Active
-                </span>
-              </div>
-
-              <p className="mt-3 text-[9px] text-charcoal-400">
-                2,489 contacts
-              </p>
-
-              <Users className="mt-4 size-5 text-charcoal-400" />
-            </DashboardCard>
-
-            {/* Traffic Sources */}
-            <DashboardCard title="Traffic Sources">
-              <div className="flex items-center gap-3">
-                <TrafficDonut />
-
-                <div className="min-w-0 space-y-1">
-                  <TrafficRow label="Google" value="42%" />
-                  <TrafficRow label="Meta" value="32%" />
-                  <TrafficRow label="Organic" value="16%" />
-                  <TrafficRow label="Referral" value="10%" />
+                  <span className="text-xs font-medium text-white">
+                    Active
+                  </span>
                 </div>
-              </div>
-            </DashboardCard>
+
+                <p className="mt-3 text-[9px] text-charcoal-400">
+                  2,489 contacts
+                </p>
+
+                <Users className="mt-4 size-5 text-charcoal-400" />
+              </DashboardCard>
+            </motion.div>
+
+            {/* =================================================
+                TRAFFIC SOURCES
+                Full width on mobile so labels cannot be clipped.
+            ================================================= */}
+
+            <motion.div
+              variants={cardVariants}
+              className="col-span-2 lg:col-span-1"
+            >
+              <DashboardCard title="Traffic Sources">
+                <div className="flex min-w-0 items-center gap-3 sm:gap-4">
+                  <TrafficDonut />
+
+                  <div className="min-w-0 flex-1 space-y-1.5">
+                    <TrafficRow label="Google" value="42%" />
+                    <TrafficRow label="Meta" value="32%" />
+                    <TrafficRow label="Organic" value="16%" />
+                    <TrafficRow label="Referral" value="10%" />
+                  </div>
+                </div>
+              </DashboardCard>
+            </motion.div>
           </div>
         </div>
       </div>
@@ -345,7 +507,7 @@ function DashboardCard({
         )}
       </div>
 
-      <div className="mt-3">{children}</div>
+      <div className="mt-3 min-w-0">{children}</div>
     </div>
   );
 }
@@ -354,7 +516,11 @@ function DashboardCard({
    MINI LINE CHART
 =============================================================== */
 
-function MiniLineChart() {
+function MiniLineChart({
+  reduceMotion,
+}: {
+  reduceMotion: boolean | null;
+}) {
   return (
     <div className="relative mt-3 h-8 overflow-hidden">
       <svg
@@ -388,11 +554,18 @@ function MiniLineChart() {
           fill="url(#growthChartFill)"
         />
 
-        <path
+        <motion.path
           d="M0 34 C20 28 28 32 42 29 S60 34 74 27 S92 31 108 23 S126 28 142 20 S162 26 178 15 S196 22 210 10 S226 13 240 4"
           fill="none"
           stroke="#1ca377"
           strokeWidth="2"
+          pathLength={1}
+          initial={{ pathLength: reduceMotion ? 1 : 0 }}
+          animate={{ pathLength: 1 }}
+          transition={{
+            duration: 1.8,
+            ease: "easeOut",
+          }}
         />
       </svg>
     </div>
@@ -408,6 +581,9 @@ function RevenueChart({
 }: {
   reduceMotion: boolean | null;
 }) {
+  const chartPath =
+    "M0 110 C20 96 35 104 52 94 S78 105 96 87 S118 98 137 82 S160 92 179 74 S205 90 225 67 S246 79 266 61 S286 76 305 53 S326 67 345 48 S365 60 386 39 S407 51 428 31 S452 39 475 15 S490 24 500 8";
+
   return (
     <div className="relative mt-3 h-24 overflow-hidden">
       <svg
@@ -428,6 +604,7 @@ function RevenueChart({
               stopColor="#12835f"
               stopOpacity="0.3"
             />
+
             <stop
               offset="100%"
               stopColor="#12835f"
@@ -437,15 +614,22 @@ function RevenueChart({
         </defs>
 
         <path
-          d="M0 110 C20 96 35 104 52 94 S78 105 96 87 S118 98 137 82 S160 92 179 74 S205 90 225 67 S246 79 266 61 S286 76 305 53 S326 67 345 48 S365 60 386 39 S407 51 428 31 S452 39 475 15 S490 24 500 8 V130 H0 Z"
+          d={`${chartPath} V130 H0 Z`}
           fill="url(#revenueFill)"
         />
 
-        <path
-          d="M0 110 C20 96 35 104 52 94 S78 105 96 87 S118 98 137 82 S160 92 179 74 S205 90 225 67 S246 79 266 61 S286 76 305 53 S326 67 345 48 S365 60 386 39 S407 51 428 31 S452 39 475 15 S490 24 500 8"
+        <motion.path
+          d={chartPath}
           fill="none"
           stroke="#1ca377"
           strokeWidth="3"
+          pathLength={1}
+          initial={{ pathLength: reduceMotion ? 1 : 0 }}
+          animate={{ pathLength: 1 }}
+          transition={{
+            duration: 2,
+            ease: [0.16, 1, 0.3, 1],
+          }}
         />
 
         <line
@@ -457,12 +641,24 @@ function RevenueChart({
           strokeWidth="1"
         />
 
-        <circle
+        <motion.circle
           cx="490"
           cy="24"
           r="5"
           fill="#1ca377"
-          className={!reduceMotion ? "animate-pulse" : ""}
+          animate={
+            reduceMotion
+              ? undefined
+              : {
+                  r: [4, 6, 4],
+                  opacity: [0.5, 1, 0.5],
+                }
+          }
+          transition={{
+            duration: 1.8,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
         />
       </svg>
     </div>
@@ -501,10 +697,29 @@ function JourneyNode({
   );
 }
 
-function JourneyLine() {
+function JourneyLine({
+  reduceMotion,
+}: {
+  reduceMotion: boolean | null;
+}) {
   return (
     <div className="relative h-px w-4 shrink-0 bg-charcoal-600 sm:w-8">
-      <span className="absolute right-0 top-1/2 size-1.5 -translate-y-1/2 rounded-full bg-emerald-400" />
+      <motion.span
+        className="absolute left-0 top-1/2 size-1.5 -translate-y-1/2 rounded-full bg-emerald-400"
+        animate={
+          reduceMotion
+            ? undefined
+            : {
+                x: [0, 24, 0],
+                opacity: [0.3, 1, 0.3],
+              }
+        }
+        transition={{
+          duration: 2,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      />
     </div>
   );
 }
@@ -515,7 +730,17 @@ function JourneyLine() {
 
 function TrafficDonut() {
   return (
-    <div className="relative size-16 shrink-0 sm:size-20">
+    <motion.div
+      className="relative size-14 shrink-0 sm:size-16"
+      animate={{
+        rotate: 360,
+      }}
+      transition={{
+        duration: 18,
+        repeat: Infinity,
+        ease: "linear",
+      }}
+    >
       <svg
         viewBox="0 0 100 100"
         className="size-full -rotate-90"
@@ -554,9 +779,9 @@ function TrafficDonut() {
       </svg>
 
       <div className="absolute inset-0 flex items-center justify-center">
-        <Radio className="size-4 text-charcoal-400" />
+        <Radio className="size-3.5 text-charcoal-400" />
       </div>
-    </div>
+    </motion.div>
   );
 }
 
@@ -572,13 +797,16 @@ function TrafficRow({
   value: string;
 }) {
   return (
-    <div className="flex items-center justify-between gap-2 text-[8px] sm:text-[9px]">
-      <div className="flex items-center gap-1.5">
-        <span className="size-1.5 rounded-full bg-emerald-400" />
-        <span className="text-charcoal-400">{label}</span>
+    <div className="flex min-w-0 items-center justify-between gap-3 text-[9px] sm:text-[10px]">
+      <div className="flex min-w-0 items-center gap-1.5">
+        <span className="size-1.5 shrink-0 rounded-full bg-emerald-400" />
+
+        <span className="truncate text-charcoal-400">
+          {label}
+        </span>
       </div>
 
-      <span className="font-medium text-charcoal-300">
+      <span className="shrink-0 font-medium text-charcoal-300">
         {value}
       </span>
     </div>
