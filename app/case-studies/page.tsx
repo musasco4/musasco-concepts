@@ -38,7 +38,7 @@ export default function CaseStudiesPage() {
             </RevealOnScroll>
             <RevealOnScroll delay={0.1}>
               <p className="mt-6 text-lg text-charcoal-300 leading-relaxed">
-                See how we've helped businesses improve visibility, attract customers and turn better positioning into measurable growth.
+                See how we&apos;ve helped businesses improve visibility, attract customers and turn better positioning into measurable growth.
               </p>
             </RevealOnScroll>
           </Container>
