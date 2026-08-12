@@ -32,6 +32,10 @@
   --color-charcoal-700: #2b3035;
   --color-charcoal-800: #1a1d20;
   --color-charcoal-900: #0d1117;
+  --color-charcoal-950: #05070a;
+
+  /* White */
+  --color-white: #ffffff;
 
   /* Typography */
   --font-display: "Manrope", ui-sans-serif, system-ui, sans-serif;
