@@ -5,18 +5,13 @@ import Link from "next/link";
 import { MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
-/**
- * StickyMobileCta — Design System §5 "Sticky CTA (Floating)", mobile bar.
- * Appears once the Hero has scrolled out of view (Homepage Spec v2 §12),
- * not on a fixed pixel threshold, since Hero height varies by viewport.
- * Desktop uses a separate floating bubble — see FloatingDesktopCta.
- */
 export function StickyMobileCta({ heroId = "hero" }: { heroId?: string }) {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     const hero = document.getElementById(heroId);
     if (!hero) return;
+
     const observer = new IntersectionObserver(
       ([entry]) => setVisible(!entry.isIntersecting),
       { threshold: 0 }
@@ -33,11 +28,11 @@ export function StickyMobileCta({ heroId = "hero" }: { heroId?: string }) {
       role="region"
       aria-label="Quick actions"
     >
-      <Button href="/contact" className="flex-1">
+      <Button href="/pricing" className="flex-1">
         Start Growing
       </Button>
       <Link
-        href="https://wa.me/000000000000"
+        href="https://wa.me/2349056935204"
         aria-label="Chat on WhatsApp"
         className="flex items-center justify-center size-12 shrink-0 rounded-md border border-charcoal-200"
       >

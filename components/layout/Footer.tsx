@@ -2,12 +2,6 @@ import Link from "next/link";
 import { MessageCircle, Mail, Phone, Contact as ContactIcon } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 
-/**
- * Lucide has no brand icons (flagged in Design System §14 for WhatsApp;
- * applies equally to Instagram/LinkedIn here) — minimal custom SVGs,
- * matching Lucide's 1.5px stroke convention, rather than pulling in an
- * icon-font dependency for two glyphs.
- */
 function InstagramIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className={className} aria-hidden="true">
@@ -17,6 +11,7 @@ function InstagramIcon({ className }: { className?: string }) {
     </svg>
   );
 }
+
 function LinkedinIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className={className} aria-hidden="true">
@@ -29,19 +24,7 @@ function LinkedinIcon({ className }: { className?: string }) {
   );
 }
 
-/**
- * Footer — expanded this round per the explicit approved link list:
- * Solutions, Industries, Results, About, Pricing, Resources, Contact,
- * Instagram, LinkedIn, WhatsApp, Email, Phone, Privacy, Terms.
- *
- * Reorganized from 5 columns into 4 + a connect row, since the approved
- * list is flatter than the previous column structure — "Solutions" here
- * is a nav label pointing to the Growth System engines, not marketing
- * copy, so it isn't the same buzzword problem flagged against body copy
- * in an earlier round (noted in the Round 2 review as a conscious,
- * flagged choice, not an oversight).
- */
-const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
+const COLUMNS = [
   {
     title: "Solutions",
     links: [
@@ -57,14 +40,7 @@ const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
       { label: "About", href: "/about" },
       { label: "Industries", href: "/industries" },
       { label: "Results", href: "/results" },
-      { label: "Portfolio", href: "/case-studies" },
-    ],
-  },
-  {
-    title: "Resources",
-    links: [
-      { label: "Blog", href: "/resources/blog" },
-      { label: "Growth Guides", href: "/resources/guides" },
+      { label: "Case Studies", href: "/case-studies" },
       { label: "FAQ", href: "/faq" },
     ],
   },
@@ -72,16 +48,17 @@ const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
     title: "Legal",
     links: [
       { label: "Privacy Policy", href: "/privacy" },
-      { label: "Terms", href: "/terms" },
+      { label: "Terms of Service", href: "/terms" },
+      { label: "Do Not Sell My Data", href: "/do-not-sell-my-data" },
     ],
   },
 ];
 
 const CONNECT = [
   { label: "Contact", href: "/contact", icon: ContactIcon },
-  { label: "WhatsApp", href: "https://wa.me/000000000000", icon: MessageCircle },
-  { label: "Email", href: "mailto:hello@musascoconcepts.com", icon: Mail },
-  { label: "Phone", href: "tel:+2340000000000", icon: Phone },
+  { label: "WhatsApp", href: "https://wa.me/2349056935204", icon: MessageCircle },
+  { label: "Email", href: "mailto:musasco4wealth@gmail.com", icon: Mail },
+  { label: "Phone", href: "tel:+2349056935204", icon: Phone },
   { label: "Instagram", href: "https://instagram.com/musascoconcepts", icon: InstagramIcon },
   { label: "LinkedIn", href: "https://linkedin.com/company/musascoconcepts", icon: LinkedinIcon },
 ];
@@ -134,10 +111,6 @@ export function Footer() {
       <div className="border-t border-white/10">
         <Container className="py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-charcoal-400">
           <p>© {new Date().getFullYear()} MUSASCO Concepts. All rights reserved.</p>
-          <div className="flex gap-6">
-            <Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link>
-            <Link href="/terms" className="hover:text-white transition-colors">Terms</Link>
-          </div>
         </Container>
       </div>
     </footer>

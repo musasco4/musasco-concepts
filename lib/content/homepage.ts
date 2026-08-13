@@ -1,10 +1,5 @@
 /**
  * Homepage content — single source of truth for every section's copy.
- * As of this round: reconciled back to the Growth System™ framing that's
- * actually live in production (musasco-concepts.vercel.app), per Round 2
- * of the Homepage Refinement Review — not the branding-agency direction
- * from the round before that, which is superseded here, not layered on
- * top of.
  */
 
 export const hero = {
@@ -20,14 +15,9 @@ export type HeroMetricCard = { icon: "trending-up" | "target" | "bar-chart"; lab
 
 /**
  * Hero Visual — "Growth Workspace" concept, approved this round.
- * Explicitly NOT branding/mockup imagery (no business cards, no brand
- * guidelines, no packaging) — a website preview plus qualitative growth
- * indicators. Per the explicit "no fake claims or fabricated numbers"
- * instruction, these are deliberately qualitative (trend direction, not
- * a specific percentage) rather than the "+38% Qualified Leads"-style
- * numeric example given in the brief — a made-up percentage is a
- * fabricated number regardless of how it's styled, and the instruction
- * that immediately followed those examples said not to use one.
+ * Explicitly NOT branding/mockup imagery — a website preview plus qualitative growth
+ * indicators. Per the explicit "no fake claims or fabricated numbers" instruction,
+ * these are deliberately qualitative (trend direction, not a specific percentage).
  */
 export const heroMetricCards: HeroMetricCard[] = [
   { icon: "trending-up", label: "Lead Volume", indicator: "Trending Up" },
@@ -39,15 +29,18 @@ export const heroWorkspace = {
   browserLabel: "yourbusiness.com",
 };
 
+export type Stat = {
+  id: string;
+  value: number;
+  prefix?: string;
+  suffix?: string;
+  label: string;
+  sourceHref: string;
+  sourceLabel: string;
+};
+
 /**
- * trustStrip — re-added per explicit request to fix a stale Vercel
- * deployment error (TrustStrip.tsx importing this export after it was
- * removed from this file). Follows the same Stat[] shape already used by
- * RESULTS_STATS below (type declared further down this file — TypeScript
- * type aliases are accessible file-wide regardless of declaration order,
- * so this isn't a forward-reference problem), since that's the existing
- * pattern in this file for a labeled-number data set, and the four
- * values requested are the same approved figures already used there.
+ * trustStrip — company-standing facts displayed in the Trust strip below the hero.
  */
 export const trustStrip: Stat[] = [
   { id: "years", value: 7, suffix: "+", label: "Years Experience", sourceHref: "", sourceLabel: "" },
@@ -56,21 +49,6 @@ export const trustStrip: Stat[] = [
   { id: "commitment", value: 100, suffix: "%", label: "Commitment to Client Success", sourceHref: "", sourceLabel: "" },
 ];
 
-/**
- * TrustSection — positioned directly after the Hero per the explicit
- * instruction to "strengthen credibility before introducing solutions."
- * Every value below is a clearly-marked placeholder — no invented company
- * names, no fabricated review count, no fabricated testimonial quotes,
- * per that same standing instruction ("do NOT invent fake companies").
- *
- * CONTENT GAP, flagged directly rather than worked around: the brief that
- * requested this section's redesign said to "use only the rewritten
- * testimonial copy," implying real testimonial copy exists somewhere —
- * it wasn't provided. `testimonials` below is an honest "coming soon"
- * state in the exact requested display format (stars + text only, no
- * name/company/headline), not a filled-in-sounding fake quote. Swap in
- * real copy the moment it exists; no component change needed.
- */
 export type TestimonialSlot = {
   stars: number;
   quote: string;
@@ -80,6 +58,10 @@ export type TestimonialSlot = {
   image?: string;
 };
 
+/**
+ * TrustSection — placeholder testimonial slot. Real testimonials will be added
+ * as engagements complete. No invented quotes or company names.
+ */
 export const trustSection = {
   intro: "Built in Lagos — serving growth-focused businesses across Nigeria, the UK, and Europe.",
   logosLabel: "Trusted by businesses across multiple industries",
@@ -119,7 +101,7 @@ export const growthSystem = {
       description:
         "Get the right people to notice you — through Meta and Google advertising built around who actually buys, not just who clicks.",
       linkLabel: "View Attract capabilities",
-      href: "/services#attract",
+      href: "/growth-system#attract",
     },
     {
       id: "convert",
@@ -127,7 +109,7 @@ export const growthSystem = {
       description:
         "Turn attention into paying customers — landing pages, website experience, and conversion optimization engineered around one job: closing.",
       linkLabel: "View Convert capabilities",
-      href: "/services#convert",
+      href: "/growth-system#convert",
     },
     {
       id: "scale",
@@ -135,19 +117,13 @@ export const growthSystem = {
       description:
         "Turn what's working into what's repeatable — ongoing strategy and optimization that compounds instead of resetting every quarter.",
       linkLabel: "View Scale capabilities",
-      href: "/services#scale",
+      href: "/growth-system#scale",
     },
   ] satisfies Engine[],
 };
 
 export type ProcessStep = { step: number; name: string; description: string };
 
-/**
- * Process — new section this round, positioned after How We Help.
- * Deliberately short per the brief ("keep it simple... short
- * descriptions only") — this answers "what happens if I hire them,"
- * which nothing else on the page currently answers.
- */
 export const process = {
   headline: "How We Work",
   subheadline: "Four steps. No surprises.",
@@ -159,22 +135,10 @@ export const process = {
   ] satisfies ProcessStep[],
 };
 
-export type Stat = {
-  id: string;
-  value: number;
-  prefix?: string;
-  suffix?: string;
-  label: string;
-  sourceHref: string;
-  sourceLabel: string;
-};
-
 /**
- * CONTENT NOTE — approved, real content (company-standing facts, not
- * case-study-derived performance claims). Numbers confirmed this round:
- * 50+ Projects Completed (superseding the previous round's unconfirmed
- * 100+ figure). Still needs founder sign-off before production — this
- * file states what to display, not that it's been independently verified.
+ * RESULTS_STATS — approved, real content (company-standing facts, not
+ * case-study-derived performance claims). Numbers confirmed: 50+ Projects
+ * Completed. Still needs founder sign-off before production.
  */
 export const RESULTS_STATS: Stat[] = [
   { id: "years", value: 7, suffix: "+", label: "Years Experience", sourceHref: "", sourceLabel: "" },
@@ -194,12 +158,12 @@ export const industriesGrid = {
   headline: "Built for Businesses Ready to Grow",
   subheadline: "Different industries. The same underlying growth problem.",
   industries: [
-    { name: "SMEs", description: "Growth systems for businesses ready to scale past word-of-mouth.", href: "/industries/smes" },
-    { name: "Professional Services", description: "Turn expertise into a predictable pipeline of qualified clients.", href: "/industries/professional-services" },
-    { name: "Home Services", description: "Fill the schedule without relying on referrals alone.", href: "/industries/home-services" },
-    { name: "Healthcare", description: "Grow patient volume without compromising trust.", href: "/industries/healthcare" },
-    { name: "Real Estate", description: "Systematic lead flow in a market that never slows down.", href: "/industries/real-estate" },
-    { name: "Local Businesses", description: "Compete with the big budgets using a smarter system, not a bigger one.", href: "/industries/local-businesses" },
+    { name: "SMEs", description: "Growth systems for businesses ready to scale past word-of-mouth.", href: "/industries" },
+    { name: "Professional Services", description: "Turn expertise into a predictable pipeline of qualified clients.", href: "/industries" },
+    { name: "Home Services", description: "Fill the schedule without relying on referrals alone.", href: "/industries" },
+    { name: "Healthcare", description: "Grow patient volume without compromising trust.", href: "/industries" },
+    { name: "Real Estate", description: "Systematic lead flow in a market that never slows down.", href: "/industries" },
+    { name: "Local Businesses", description: "Compete with the big budgets using a smarter system, not a bigger one.", href: "/industries" },
   ] satisfies Industry[],
 };
 
@@ -213,12 +177,9 @@ export type PortfolioItem = {
 };
 
 /**
- * PORTFOLIO_SHOWCASE — approved structure this round: Industry / Challenge
- * / Solution / Outcome per card, "placeholders only, do not invent
- * results" — every field below is explicitly bracketed as a placeholder,
- * not written to read as a real (but fabricated) case study. Swap in real
- * client data field-by-field as engagements complete; no component
- * change required.
+ * PORTFOLIO_SHOWCASE — placeholder content by design. Every field is explicitly
+ * bracketed as a placeholder, not written to read as a real case study.
+ * Swap in real client data field-by-field as engagements complete.
  */
 export const PORTFOLIO_SHOWCASE: PortfolioItem[] = [
   {
@@ -264,9 +225,9 @@ export const blueprintCallout = {
   body:
     "A one-time, custom roadmap that applies the Growth System™ to your specific business — which engine to fix first, and why. No long-term commitment. Just clarity.",
   ctaLabel: "Get My Growth Blueprint",
-  ctaHref: "/growth-blueprint",
+  ctaHref: "/growth-audit",
   skipLabel: "Already know what you need? Start Growing",
-  skipHref: "/contact",
+  skipHref: "/pricing",
 };
 
 export const finalCta = {
