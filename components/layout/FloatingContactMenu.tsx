@@ -29,16 +29,8 @@ const CONTACT_ACTIONS = [
 
 export function FloatingContactMenu() {
   const [isOpen, setIsOpen] = useState(false);
-  const [reducedMotion, setReducedMotion] = useState(false);
 
-  useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReducedMotion(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  }, []);
-
+  // Close on Escape — async callback, no sync setState in effect body
   useEffect(() => {
     if (!isOpen) return;
     const handleKey = (e: KeyboardEvent) => {
@@ -56,36 +48,28 @@ export function FloatingContactMenu() {
         right: "calc(1.25rem + env(safe-area-inset-right, 0px))",
       }}
     >
-      {/* Expanded Actions */}
+      {/* Expanded Actions — CSS-only animation via motion-reduce: */}
       <div
         className={cn(
-          "flex flex-col items-end gap-3 origin-bottom-right",
-          reducedMotion
-            ? isOpen ? "opacity-100 visible" : "opacity-0 invisible"
-            : "",
-          !reducedMotion && "transition-all duration-300 ease-[var(--ease-standard)]",
-          !reducedMotion && (isOpen
+          "flex flex-col items-end gap-3 origin-bottom-right transition-all duration-300 ease-[var(--ease-standard)]",
+          "motion-reduce:transition-none motion-reduce:duration-0",
+          isOpen
             ? "opacity-100 scale-100 translate-y-0"
             : "opacity-0 scale-75 translate-y-4 pointer-events-none"
-          )
         )}
         aria-hidden={!isOpen}
       >
         {CONTACT_ACTIONS.map((action, i) => (
           <div
             key={action.label}
-            className="flex items-center gap-3"
-            style={
-              !reducedMotion
-                ? {
-                    transitionDelay: isOpen ? `${i * 50}ms` : "0ms",
-                    transitionDuration: "200ms",
-                    transitionProperty: "opacity, transform",
-                    opacity: isOpen ? 1 : 0,
-                    transform: isOpen ? "translateX(0)" : "translateX(10px)",
-                  }
-                : undefined
-            }
+            className={cn(
+              "flex items-center gap-3 transition-all duration-200 ease-[var(--ease-standard)]",
+              "motion-reduce:transition-none motion-reduce:duration-0",
+              isOpen
+                ? "opacity-100 translate-x-0"
+                : "opacity-0 translate-x-3"
+            )}
+            style={{ transitionDelay: isOpen ? `${i * 50}ms` : "0ms" }}
           >
             <span className="text-xs font-bold text-charcoal-900 bg-white/90 backdrop-blur-sm px-2 py-1 rounded shadow-sm whitespace-nowrap">
               {action.label}
@@ -95,6 +79,7 @@ export function FloatingContactMenu() {
               aria-label={action.label}
               className={cn(
                 "flex items-center justify-center size-12 rounded-full shadow-lg transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2",
+                "motion-reduce:transition-none",
                 action.color
               )}
               tabIndex={isOpen ? 0 : -1}
@@ -113,6 +98,7 @@ export function FloatingContactMenu() {
         aria-label={isOpen ? "Close contact menu" : "Open contact menu"}
         className={cn(
           "flex items-center justify-center size-14 rounded-full shadow-xl transition-all duration-300 ease-[var(--ease-standard)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2",
+          "motion-reduce:transition-none motion-reduce:duration-0",
           isOpen
             ? "bg-charcoal-900 text-white rotate-45"
             : "bg-emerald-600 text-white hover:bg-emerald-700 hover:scale-105 active:scale-95"

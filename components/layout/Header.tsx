@@ -21,103 +21,80 @@ export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
 
+  // Scroll detection — async callback, no sync setState in effect body
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
-
     onScroll();
-
     window.addEventListener("scroll", onScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-    };
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Close mobile menu when route changes
-  useEffect(() => {
-    setMobileOpen(false);
-  }, [pathname]);
-
-  // Prevent body scrolling while mobile menu is open
+  // Body scroll lock when mobile menu is open
   useEffect(() => {
     if (mobileOpen) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
     }
-
     return () => {
       document.body.style.overflow = "";
     };
   }, [mobileOpen]);
 
-  // Close mobile menu with Escape
+  // Close on Escape — async callback, no sync setState in effect body
   useEffect(() => {
     if (!mobileOpen) return;
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setMobileOpen(false);
-      }
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMobileOpen(false);
     };
-
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
   }, [mobileOpen]);
 
   const isActive = (href: string) => {
-    if (href === "/") {
-      return pathname === "/";
-    }
-
+    if (href === "/") return pathname === "/";
     const basePath = href.split("#")[0];
-
     return pathname.startsWith(basePath);
   };
+
+  const isDark = !scrolled && !mobileOpen;
 
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 w-full bg-white transition-all duration-300 ease-[var(--ease-standard)]",
+        "sticky top-0 z-50 w-full transition-all duration-300 ease-[var(--ease-standard)]",
         scrolled
           ? "bg-white/95 backdrop-blur-md shadow-[var(--shadow-card-sm)] border-b border-charcoal-100"
-          : "bg-white"
+          : "bg-transparent"
       )}
     >
-      {/* =========================================================
-          DESKTOP HEADER
-          ========================================================= */}
+      {/* ===== DESKTOP HEADER ===== */}
       <div className="hidden lg:block">
-        <Container className="flex h-[72px] items-center gap-8">
-          
-          {/* Brand */}
+        <Container className="flex h-[72px] items-center justify-between gap-8">
           <Link
             href="/"
+            className="shrink-0 font-display font-extrabold text-lg tracking-tight whitespace-nowrap transition-colors duration-300"
             aria-label="MUSASCO Home"
-            className="shrink-0 font-display font-bold text-lg tracking-tight text-charcoal-900 whitespace-nowrap"
           >
-            MUSASCO
+            <span className={isDark ? "text-white" : "text-charcoal-900"}>
+              MUSASCO
+            </span>
           </Link>
 
-          {/* Primary Navigation
-              Moved closer to MUSASCO */}
-          <nav
-            aria-label="Primary"
-            className="flex items-center gap-1 xl:gap-2 ml-2 shrink-0"
-          >
+          <nav aria-label="Primary" className="flex items-center gap-1 xl:gap-2 shrink-0">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.name}
                 href={link.href}
                 className={cn(
-                  "px-3 py-2 rounded-md text-sm font-medium whitespace-nowrap",
-                  "transition-colors duration-200",
-                  isActive(link.href)
-                    ? "text-emerald-600 bg-emerald-50"
-                    : "text-charcoal-700 hover:text-emerald-600 hover:bg-charcoal-50"
+                  "px-3 py-2 rounded-md text-sm font-medium transition-colors whitespace-nowrap",
+                  isDark
+                    ? isActive(link.href)
+                      ? "text-emerald-400 bg-white/10"
+                      : "text-white/90 hover:text-white hover:bg-white/10"
+                    : isActive(link.href)
+                      ? "text-emerald-600 bg-emerald-50"
+                      : "text-charcoal-600 hover:text-charcoal-900 hover:bg-charcoal-50"
                 )}
               >
                 {link.name}
@@ -125,16 +102,18 @@ export function Header() {
             ))}
           </nav>
 
-          {/* Right-side actions
-              ml-auto keeps these pushed to the right */}
-          <div className="flex items-center gap-4 shrink-0 ml-auto">
+          <div className="flex items-center gap-3 shrink-0 whitespace-nowrap">
             <Link
               href="/growth-audit"
-              className="text-sm font-medium text-emerald-600 hover:text-emerald-700 hover:underline underline-offset-4 whitespace-nowrap transition-colors"
+              className={cn(
+                "text-sm font-medium hover:underline underline-offset-4 transition-colors",
+                isDark
+                  ? "text-emerald-400 hover:text-emerald-300"
+                  : "text-emerald-600 hover:text-emerald-700"
+              )}
             >
               Free Growth Audit
             </Link>
-
             <Button
               href="/pricing"
               size="default"
@@ -146,9 +125,7 @@ export function Header() {
         </Container>
       </div>
 
-      {/* =========================================================
-          MOBILE HEADER
-          ========================================================= */}
+      {/* ===== MOBILE HEADER — Compact Pill ===== */}
       <div className="lg:hidden px-4 pt-3 pb-1">
         <div
           className={cn(
@@ -158,27 +135,24 @@ export function Header() {
               : "bg-charcoal-900/80 backdrop-blur-sm border border-white/5"
           )}
           style={{
-            paddingTop:
-              "max(0.625rem, env(safe-area-inset-top, 0px))",
+            paddingTop: "max(0.625rem, env(safe-area-inset-top, 0px))",
           }}
         >
-          {/* Mobile brand — text only */}
           <Link
             href="/"
+            className="shrink-0 font-display font-extrabold text-sm tracking-tight whitespace-nowrap"
             aria-label="MUSASCO Home"
-            className="shrink-0 font-display font-bold text-sm tracking-tight whitespace-nowrap"
           >
             <span className="text-white">MUSASCO</span>
           </Link>
 
-          {/* Hamburger */}
           <button
             type="button"
             className="flex items-center justify-center size-10 rounded-full text-white hover:bg-white/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
             aria-expanded={mobileOpen}
             aria-controls="mobile-nav"
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
-            onClick={() => setMobileOpen((value) => !value)}
+            onClick={() => setMobileOpen((v) => !v)}
           >
             {mobileOpen ? (
               <X className="size-5" aria-hidden="true" />
@@ -189,25 +163,20 @@ export function Header() {
         </div>
       </div>
 
-      {/* =========================================================
-          MOBILE FULL-SCREEN NAVIGATION
-          ========================================================= */}
+      {/* ===== MOBILE FULL-SCREEN OVERLAY ===== */}
+      {/* No key={pathname} — menu closes via onClick handlers on links/buttons below */}
       {mobileOpen && (
         <div
           id="mobile-nav"
           className="lg:hidden fixed inset-0 top-0 z-40 bg-charcoal-900 text-white overflow-y-auto"
-          style={{
-            paddingTop: "env(safe-area-inset-top, 0px)",
-          }}
+          style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}
         >
-          {/* Spacer for the mobile header */}
           <div className="h-[72px] shrink-0" />
 
           <Container className="py-8 flex flex-col gap-5">
             <p className="text-xs font-bold uppercase tracking-widest text-charcoal-500 mb-1">
               Navigation
             </p>
-
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.name}
@@ -233,7 +202,6 @@ export function Header() {
               >
                 Build Your Growth System
               </Button>
-
               <Link
                 href="/growth-audit"
                 onClick={() => setMobileOpen(false)}

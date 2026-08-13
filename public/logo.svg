@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 48" fill="none" role="img" aria-label="MUSASCO Concepts">
+  <!-- Stylized M Mark -->
+  <path d="M6 42V6h8l10 22L34 6h8v36h-7V18L25 38h-2L13 18v24H6z" fill="#0e6b4e"/>
+  <!-- MUSASCO wordmark (vector paths) -->
+  <path d="M58 34V14h4.5l6.5 14 6.5-14H80v20h-4V22l-5 12h-2l-5-12v12h-6z" fill="#0d1117"/>
+  <path d="M86 24c0-6 3.5-10.5 9-10.5s9 4.5 9 10.5-3.5 10.5-9 10.5-9-4.5-9-10.5zm13.5 0c0-3.8-2-6.5-4.5-6.5s-4.5 2.7-4.5 6.5 2 6.5 4.5 6.5 4.5-2.7 4.5-6.5z" fill="#0d1117"/>
+  <path d="M110 34V14h4.5l8 13 8-13h4.5v20h-4.5V22l-6 12h-4l-6-12v12H110z" fill="#0d1117"/>
+  <path d="M142 34V14h13v3.5h-8.5v4h7v3.5h-7v5.5h9V34H142z" fill="#0d1117"/>
+  <path d="M160 34V14h4.5l8 13 8-13h4.5v20h-4.5V22l-6 12h-4l-6-12v12H160z" fill="#0d1117"/>
+  <path d="M192 27.5c0 4-2.5 6.5-7 6.5h-7V14h7c4.5 0 7 2.5 7 6.5v7zM182.5 30h2.5c2 0 3-1 3-3v-6c0-2-1-3-3-3h-2.5v12z" fill="#0d1117"/>
+  <path d="M200 34V14h4.5v16.5h8V34H200z" fill="#0d1117"/>
+  <!-- CONCEPTS wordmark (emerald accent) -->
+  <g transform="translate(58, 0)" fill="#0e6b4e">
+    <path d="M155 34V14h4.5v16.5h8V34H155z" transform="translate(-155,0)"/>
+    <path d="M168 24c0-6 3.5-10.5 9-10.5 4 0 6.5 2 7.5 5l-3.5 1.5c-.5-1.5-2-3-4-3-3 0-4.5 2.7-4.5 6.5s1.5 6.5 4.5 6.5c2 0 3.5-1.5 4-3l3.5 1.5c-1 3-3.5 5-7.5 5-5.5 0-9-4.5-9-10.5z" transform="translate(-155,0)"/>
+    <path d="M190 34V14h4.5l5 13 5-13h4.5v20h-4V22l-4 12h-3l-4-12v12H190z" transform="translate(-155,0)"/>
+    <path d="M210 34V14h13v3.5h-8.5v4h7v3.5h-7v5.5h9V34H210z" transform="translate(-155,0)"/>
+    <path d="M228 24c0-6 3.5-10.5 9-10.5s9 4.5 9 10.5-3.5 10.5-9 10.5-9-4.5-9-10.5zm13.5 0c0-3.8-2-6.5-4.5-6.5s-4.5 2.7-4.5 6.5 2 6.5 4.5 6.5 4.5-2.7 4.5-6.5z" transform="translate(-155,0)"/>
+    <path d="M252 14h4.5v16.5h8V34H252z" transform="translate(-155,0)"/>
+    <path d="M268 34V14h4.5l8 13 8-13h4.5v20h-4.5V22l-6 12h-4l-6-12v12H268z" transform="translate(-155,0)"/>
+    <path d="M295 27.5c0 4-2.5 6.5-7 6.5h-7V14h7c4.5 0 7 2.5 7 6.5v7zM285.5 30h2.5c2 0 3-1 3-3v-6c0-2-1-3-3-3h-2.5v12z" transform="translate(-155,0)"/>
+  </g>
+</svg>
