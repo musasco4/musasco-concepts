@@ -21,21 +21,28 @@ export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
 
-  // Detect scroll position.
+  /* =========================================================
+     SCROLL DETECTION
+     ========================================================= */
   useEffect(() => {
     const onScroll = () => {
       setScrolled(window.scrollY > 40);
     };
 
     onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
+
+    window.addEventListener("scroll", onScroll, {
+      passive: true,
+    });
 
     return () => {
       window.removeEventListener("scroll", onScroll);
     };
   }, []);
 
-  // Lock body scrolling while the mobile menu is open.
+  /* =========================================================
+     LOCK BODY SCROLL WHEN MOBILE MENU IS OPEN
+     ========================================================= */
   useEffect(() => {
     if (mobileOpen) {
       document.body.style.overflow = "hidden";
@@ -48,7 +55,9 @@ export function Header() {
     };
   }, [mobileOpen]);
 
-  // Allow Escape to close the mobile menu.
+  /* =========================================================
+     ESCAPE KEY CLOSES MOBILE MENU
+     ========================================================= */
   useEffect(() => {
     if (!mobileOpen) return;
 
@@ -65,6 +74,9 @@ export function Header() {
     };
   }, [mobileOpen]);
 
+  /* =========================================================
+     ACTIVE NAVIGATION
+     ========================================================= */
   const isActive = (href: string) => {
     if (href === "/") {
       return pathname === "/";
@@ -75,55 +87,48 @@ export function Header() {
     return pathname.startsWith(basePath);
   };
 
-  const isDark = !scrolled && !mobileOpen;
-
   return (
     <>
-      {/* =========================================================
+      {/* =====================================================
           DESKTOP HEADER
-          ========================================================= */}
+          ALWAYS WHITE
+          ===================================================== */}
       <header
         className={cn(
-          "hidden lg:block sticky top-0 z-50 w-full transition-all duration-300 ease-[var(--ease-standard)]",
+          "hidden lg:block sticky top-0 z-50 w-full bg-white transition-all duration-300 ease-[var(--ease-standard)]",
           scrolled
-            ? "bg-white/95 backdrop-blur-md shadow-[var(--shadow-card-sm)] border-b border-charcoal-100"
-            : "bg-transparent"
+            ? "backdrop-blur-md shadow-[var(--shadow-card-sm)] border-b border-charcoal-100"
+            : "border-b border-transparent"
         )}
       >
-        <Container className="flex h-[72px] items-center justify-between gap-8">
-          {/* Brand */}
+        <Container className="flex h-[72px] items-center gap-8">
+          {/* =================================================
+              BRAND
+              ================================================= */}
           <Link
             href="/"
-            className="shrink-0 font-display font-extrabold text-lg tracking-tight whitespace-nowrap transition-colors duration-300"
+            className="shrink-0 font-display font-extrabold text-lg tracking-tight whitespace-nowrap text-charcoal-900 transition-colors duration-300"
             aria-label="MUSASCO Home"
           >
-            <span
-              className={
-                isDark ? "text-white" : "text-charcoal-900"
-              }
-            >
-              MUSASCO
-            </span>
+            MUSASCO
           </Link>
 
-          {/* Navigation */}
+          {/* =================================================
+              DESKTOP NAVIGATION
+              ================================================= */}
           <nav
             aria-label="Primary"
-            className="flex items-center gap-1 xl:gap-2 shrink-0"
+            className="flex items-center gap-1 xl:gap-2 shrink-0 ml-2"
           >
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.name}
                 href={link.href}
                 className={cn(
-                  "px-3 py-2 rounded-md text-sm font-medium transition-colors whitespace-nowrap",
-                  isDark
-                    ? isActive(link.href)
-                      ? "text-emerald-400 bg-white/10"
-                      : "text-white/90 hover:text-white hover:bg-white/10"
-                    : isActive(link.href)
-                      ? "text-emerald-600 bg-emerald-50"
-                      : "text-charcoal-600 hover:text-charcoal-900 hover:bg-charcoal-50"
+                  "px-3 py-2 rounded-md text-sm font-medium whitespace-nowrap transition-colors",
+                  isActive(link.href)
+                    ? "text-emerald-600 bg-emerald-50"
+                    : "text-charcoal-600 hover:text-charcoal-900 hover:bg-charcoal-50"
                 )}
               >
                 {link.name}
@@ -131,16 +136,13 @@ export function Header() {
             ))}
           </nav>
 
-          {/* Desktop CTAs */}
-          <div className="flex items-center gap-3 shrink-0 whitespace-nowrap">
+          {/* =================================================
+              DESKTOP CTAs
+              ================================================= */}
+          <div className="ml-auto flex items-center gap-3 shrink-0 whitespace-nowrap">
             <Link
               href="/growth-audit"
-              className={cn(
-                "text-sm font-medium hover:underline underline-offset-4 transition-colors",
-                isDark
-                  ? "text-emerald-400 hover:text-emerald-300"
-                  : "text-emerald-600 hover:text-emerald-700"
-              )}
+              className="text-sm font-medium text-emerald-600 hover:text-emerald-700 hover:underline underline-offset-4 transition-colors"
             >
               Free Growth Audit
             </Link>
@@ -156,10 +158,10 @@ export function Header() {
         </Container>
       </header>
 
-      {/* =========================================================
+      {/* =====================================================
           MOBILE HEADER
-          Transparent outer wrapper + dark pill
-          ========================================================= */}
+          TRANSPARENT OUTER + DARK PILL
+          ===================================================== */}
       <div className="lg:hidden fixed inset-x-0 top-0 z-[60] pointer-events-none">
         <div
           className="px-4 pt-3 pb-1 pointer-events-auto"
@@ -182,7 +184,9 @@ export function Header() {
               className="shrink-0 font-display font-extrabold text-sm tracking-tight whitespace-nowrap"
               aria-label="MUSASCO Home"
             >
-              <span className="text-white">MUSASCO</span>
+              <span className="text-white">
+                MUSASCO
+              </span>
             </Link>
 
             {/* Mobile Menu Toggle */}
@@ -192,9 +196,13 @@ export function Header() {
               aria-expanded={mobileOpen}
               aria-controls="mobile-nav"
               aria-label={
-                mobileOpen ? "Close menu" : "Open menu"
+                mobileOpen
+                  ? "Close menu"
+                  : "Open menu"
               }
-              onClick={() => setMobileOpen((value) => !value)}
+              onClick={() =>
+                setMobileOpen((value) => !value)
+              }
             >
               {mobileOpen ? (
                 <X
@@ -212,15 +220,17 @@ export function Header() {
         </div>
       </div>
 
-      {/* Spacer for fixed mobile header */}
+      {/* =====================================================
+          MOBILE HEADER SPACER
+          ===================================================== */}
       <div
         className="lg:hidden h-[72px]"
         aria-hidden="true"
       />
 
-      {/* =========================================================
+      {/* =====================================================
           MOBILE FULL-SCREEN NAVIGATION
-          ========================================================= */}
+          ===================================================== */}
       {mobileOpen && (
         <div
           id="mobile-nav"
@@ -231,15 +241,17 @@ export function Header() {
           }}
           onClick={(event) => {
             /*
-             * Clicking the actual overlay background closes
-             * the menu. Clicking the navigation content does not.
+             * Clicking the empty background closes the menu.
+             * Clicking navigation content does not.
              */
-            if (event.target === event.currentTarget) {
+            if (
+              event.target === event.currentTarget
+            ) {
               setMobileOpen(false);
             }
           }}
         >
-          {/* Spacer for the header pill */}
+          {/* Spacer for mobile header pill */}
           <div
             className="h-[72px] shrink-0"
             aria-hidden="true"
@@ -256,7 +268,9 @@ export function Header() {
               <Link
                 key={link.name}
                 href={link.href}
-                onClick={() => setMobileOpen(false)}
+                onClick={() =>
+                  setMobileOpen(false)
+                }
                 className={cn(
                   "text-lg font-semibold py-3 border-b border-white/10 transition-colors",
                   isActive(link.href)
@@ -274,14 +288,18 @@ export function Header() {
                 href="/pricing"
                 variant="primary"
                 className="w-full"
-                onClick={() => setMobileOpen(false)}
+                onClick={() =>
+                  setMobileOpen(false)
+                }
               >
                 Build Your Growth System
               </Button>
 
               <Link
                 href="/growth-audit"
-                onClick={() => setMobileOpen(false)}
+                onClick={() =>
+                  setMobileOpen(false)
+                }
                 className="text-center text-sm font-medium text-emerald-300 hover:text-emerald-200 transition-colors py-2"
               >
                 or start with a free Growth Audit
