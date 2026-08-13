@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { StickyMobileCta } from "@/components/layout/StickyMobileCta";
 import { Container } from "@/components/ui/Container";
 import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
 import { ArrowRight } from "lucide-react";
@@ -97,7 +96,6 @@ export default function CaseStudiesPage() {
 
       </main>
       <Footer />
-      <StickyMobileCta heroId="case-studies-hero" />
     </>
   );
 }

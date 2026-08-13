@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { StickyMobileCta } from "@/components/layout/StickyMobileCta";
 import { FinalCta } from "@/components/sections/FinalCta";
 import { IndustriesHero } from "@/components/sections/industries/IndustriesHero";
 import { IndustryShowcase } from "@/components/sections/industries/IndustryShowcase";
@@ -25,7 +24,6 @@ export default function IndustriesPage() {
         <FinalCta />
       </main>
       <Footer />
-      <StickyMobileCta heroId="industries-hero" />
     </>
   );
 }

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { StickyMobileCta } from "@/components/layout/StickyMobileCta";
 import { ZeeChilledPartyHero } from "@/components/sections/case-studies/ZeeChilledPartyHero";
 import { ZeeChilledPartyContext } from "@/components/sections/case-studies/ZeeChilledPartyContext";
 import { ZeeChilledPartyWork } from "@/components/sections/case-studies/ZeeChilledPartyWork";
@@ -33,7 +32,6 @@ export default function ZeeChilledPartyCaseStudyPage() {
         <ZeeChilledPartyLesson />
       </main>
       <Footer />
-      <StickyMobileCta heroId="zee-chilled-party-hero" />
     </>
   );
 }

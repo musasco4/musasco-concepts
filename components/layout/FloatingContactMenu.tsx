@@ -30,7 +30,7 @@ const CONTACT_ACTIONS = [
 export function FloatingContactMenu() {
   const [isOpen, setIsOpen] = useState(false);
 
-  // Close on Escape — async callback, no sync setState in effect body
+  // Close on Escape — event listener setState is allowed
   useEffect(() => {
     if (!isOpen) return;
     const handleKey = (e: KeyboardEvent) => {
@@ -42,7 +42,7 @@ export function FloatingContactMenu() {
 
   return (
     <div
-      className="lg:hidden fixed z-50 flex flex-col items-end gap-3"
+      className="lg:hidden fixed z-[40] flex flex-col items-end gap-3"
       style={{
         bottom: "calc(1.25rem + env(safe-area-inset-bottom, 0px))",
         right: "calc(1.25rem + env(safe-area-inset-right, 0px))",

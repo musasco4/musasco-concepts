@@ -1,6 +1,5 @@
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { StickyMobileCta } from "@/components/layout/StickyMobileCta";
 import { Hero } from "@/components/sections/Hero";
 import { TrustSection } from "@/components/sections/trust/TrustSection";
 import { ProblemStatement } from "@/components/sections/ProblemStatement";
@@ -41,7 +40,6 @@ export default function HomePage() {
         <FinalCta />
       </main>
       <Footer />
-      <StickyMobileCta heroId="hero" />
     </>
   );
 }

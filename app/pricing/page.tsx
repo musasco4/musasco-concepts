@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { StickyMobileCta } from "@/components/layout/StickyMobileCta";
 import { PricingHero } from "@/components/sections/pricing/PricingHero";
 import { PricingGrid } from "@/components/sections/pricing/PricingGrid";
 import { PricingComparison } from "@/components/sections/pricing/PricingComparison";
@@ -29,7 +28,6 @@ export default function PricingPage() {
         <FinalCta />
       </main>
       <Footer />
-      <StickyMobileCta heroId="pricing-hero" />
     </>
   );
 }

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { StickyMobileCta } from "@/components/layout/StickyMobileCta";
 import { GrowthHeroSection } from "@/components/growth/GrowthHeroSection";
 import { GrowthSystemOverview } from "@/components/growth/GrowthSystemOverview";
 import { GrowthAttractSection } from "@/components/growth/GrowthAttractSection";
@@ -32,7 +31,6 @@ export default function GrowthSystemPage() {
         <GrowthCTASection />
       </main>
       <Footer />
-      <StickyMobileCta heroId="growth-hero" />
     </>
   );
 }

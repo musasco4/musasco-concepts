@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { StickyMobileCta } from "@/components/layout/StickyMobileCta";
 import { Container } from "@/components/ui/Container";
 import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
 import { Button } from "@/components/ui/Button";
@@ -230,7 +229,6 @@ export default function GrowthAuditPage() {
 
       </main>
       <Footer />
-      <StickyMobileCta heroId="growth-audit-hero" />
     </>
   );
 }

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { StickyMobileCta } from "@/components/layout/StickyMobileCta";
 import { FinalCta } from "@/components/sections/FinalCta";
 import { ResultsHero } from "@/components/sections/results/ResultsHero";
 import { ResultsShowcase } from "@/components/sections/results/ResultsShowcase";
@@ -29,7 +28,6 @@ export default function ResultsPage() {
         <FinalCta />
       </main>
       <Footer />
-      <StickyMobileCta heroId="results-hero" />
     </>
   );
 }

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { StickyMobileCta } from "@/components/layout/StickyMobileCta";
 // UPDATED IMPORT PATH
 import { TrustSection } from "@/components/sections/trust/TrustSection";
 
@@ -64,7 +63,6 @@ export default function ContactPage() {
         
       </main>
       <Footer />
-      <StickyMobileCta heroId="contact-hero" />
     </>
   );
 }
