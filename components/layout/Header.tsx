@@ -324,7 +324,7 @@ export function Header() {
                 {/* Official full logo inside menu */}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/m-logo-dark.svg"
+                  src="/m-logo-light.svg"
                   alt="Musasco"
                   width={190}
                   height={46}
