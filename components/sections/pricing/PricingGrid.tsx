@@ -5,71 +5,186 @@ import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
-import { pricingTiers, pricingDisclaimer } from "@/lib/content/pricing";
+import {
+  pricingTiers,
+  pricingDisclaimer,
+} from "@/lib/content/pricing";
 import { cn } from "@/lib/utils";
 
-const TIER_CTA_HREFS: Record<string, string> = {
-  audit: "/growth-audit",
-  foundation: "/pricing",
-  accelerator: "/pricing",
-  partner: "/contact",
+/**
+ * Package-specific WhatsApp links.
+ *
+ * The message tells us exactly which package the visitor is asking about.
+ */
+const WHATSAPP_NUMBER = "2349056935204";
+
+const TIER_WHATSAPP_MESSAGES: Record<string, string> = {
+  audit:
+    "Hi Musasco, I'm interested in the Growth Audit package. I'd like to learn more about getting started.",
+  foundation:
+    "Hi Musasco, I'm interested in the Growth Foundation package. I'd like to learn more about getting started.",
+  accelerator:
+    "Hi Musasco, I'm interested in the Growth Accelerator package. I'd like to learn more about getting started.",
+  partner:
+    "Hi Musasco, I'm interested in the Growth Partner package. I'd like to discuss how we can work together.",
+};
+
+function getWhatsAppHref(tierId: string) {
+  const message =
+    TIER_WHATSAPP_MESSAGES[tierId] ??
+    "Hi Musasco, I'd like to learn more about your growth packages.";
+
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+    message
+  )}`;
+}
+
+/**
+ * Strategic pricing anchors.
+ *
+ * These are deliberately separate from pricingTiers so we don't have to
+ * modify the underlying pricing content just to display the comparison price.
+ */
+const ORIGINAL_PRICES: Record<string, string> = {
+  audit: "$175",
+  foundation: "$400",
+  accelerator: "$750",
+};
+
+const CURRENT_PRICE_OVERRIDES: Record<string, string> = {
+  audit: "$120",
 };
 
 export function PricingGrid() {
   return (
-    <Section background="subtle" ariaLabel="Pricing Plans" className="py-16 lg:py-24">
+    <Section
+      background="subtle"
+      ariaLabel="Pricing Plans"
+      className="py-16 lg:py-24"
+    >
       <Container>
-        <div className="flex flex-col items-center text-center mb-16">
+        {/* Section heading */}
+        <div className="mb-16 flex flex-col items-center text-center">
           <RevealOnScroll>
-            <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl text-charcoal-900">
+            <h2 className="font-display text-3xl font-bold tracking-tight text-charcoal-900 sm:text-4xl">
               Investment
             </h2>
-            <p className="mt-4 text-charcoal-600 max-w-2xl text-lg">
+
+            <p className="mt-4 max-w-2xl text-lg text-charcoal-600">
               Transparent starting points for your growth journey.
             </p>
           </RevealOnScroll>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6 items-start">
+        {/* Pricing cards */}
+        <div className="grid grid-cols-1 items-stretch gap-8 md:grid-cols-2 lg:grid-cols-4 lg:gap-6">
           {pricingTiers.map((tier, i) => {
-            const ctaHref = TIER_CTA_HREFS[tier.id] ?? "/contact";
+            const originalPrice = ORIGINAL_PRICES[tier.id];
+
+            const currentPrice =
+              CURRENT_PRICE_OVERRIDES[tier.id] ?? tier.price;
+
+            const ctaHref = getWhatsAppHref(tier.id);
+
             return (
-              <RevealOnScroll key={tier.id} delay={i * 0.1}>
+              <RevealOnScroll
+                key={tier.id}
+                delay={i * 0.1}
+                className="h-full"
+              >
                 <Card
                   variant={tier.highlighted ? "raised" : "flat"}
                   hover
                   className={cn(
-                    "relative p-8 h-full flex flex-col transition-transform duration-300",
-                    tier.highlighted && "border-2 border-emerald-600 shadow-xl lg:scale-105 z-10 bg-white"
+                    "relative flex h-full min-h-[680px] flex-col p-8 transition-transform duration-300",
+                    tier.highlighted &&
+                      "z-10 border-2 border-emerald-600 bg-white shadow-xl lg:scale-105"
                   )}
                 >
+                  {/* Recommended badge */}
                   {tier.highlighted && (
                     <div className="absolute -top-4 left-1/2 -translate-x-1/2">
                       <Badge variant="solid">Recommended</Badge>
                     </div>
                   )}
+
+                  {/* Package header */}
                   <div className="mb-6">
-                    <h3 className="font-display text-xl font-bold text-charcoal-900">{tier.name}</h3>
-                    <p className="mt-3 text-sm text-charcoal-600 min-h-[48px] leading-relaxed">{tier.description}</p>
+                    <h3 className="font-display text-xl font-bold text-charcoal-900">
+                      {tier.name}
+                    </h3>
+
+                    <p className="mt-3 min-h-[72px] text-sm leading-relaxed text-charcoal-600">
+                      {tier.description}
+                    </p>
                   </div>
-                  <div className="mb-8">
-                    <span className="text-4xl font-bold text-charcoal-900 font-stat tracking-tight">{tier.price}</span>
-                    {tier.price !== "Custom" && <span className="text-charcoal-500 text-sm ml-2 font-medium">starting</span>}
+
+                  {/* Price */}
+                  <div className="mb-8 min-h-[76px]">
+                    {originalPrice && (
+                      <div className="mb-1">
+                        <span className="text-sm font-medium text-charcoal-400 line-through decoration-charcoal-400">
+                          {originalPrice}
+                        </span>
+                      </div>
+                    )}
+
+                    <div className="flex items-baseline gap-2">
+                      <span className="font-stat text-4xl font-bold tracking-tight text-charcoal-900">
+                        {currentPrice}
+                      </span>
+
+                      {currentPrice !== "Custom" && (
+                        <span className="text-sm font-medium text-charcoal-500">
+                          starting
+                        </span>
+                      )}
+                    </div>
                   </div>
-                  <ul className="space-y-4 mb-8 flex-1">
+
+                  {/* Features */}
+                  <ul className="mb-8 flex-1 space-y-4">
                     {tier.features.map((feature) => (
-                      <li key={feature} className="flex items-start gap-3 text-sm text-charcoal-700 leading-relaxed">
-                        <Check className="size-5 text-emerald-600 shrink-0 mt-0.5" aria-hidden="true" />
+                      <li
+                        key={feature}
+                        className="flex items-start gap-3 text-sm leading-relaxed text-charcoal-700"
+                      >
+                        <Check
+                          className="mt-0.5 size-5 shrink-0 text-emerald-600"
+                          aria-hidden="true"
+                        />
+
                         <span>{feature}</span>
                       </li>
                     ))}
                   </ul>
-                  {tier.note && (
-                    <div className="mb-6 p-4 rounded-lg bg-charcoal-50 border border-charcoal-100">
-                      <p className="text-xs text-charcoal-600 leading-relaxed">{tier.note}</p>
+
+                  {/* Optional note */}
+                  {tier.note ? (
+                    <div className="mb-6 min-h-[76px] rounded-lg border border-charcoal-100 bg-charcoal-50 p-4">
+                      <p className="text-xs leading-relaxed text-charcoal-600">
+                        {tier.note}
+                      </p>
                     </div>
+                  ) : (
+                    /*
+                     * Intentional empty space.
+                     *
+                     * This keeps the CTA aligned with the other cards even
+                     * when a package doesn't have a note.
+                     */
+                    <div className="mb-6 min-h-[76px]" aria-hidden="true" />
                   )}
-                  <Button href={ctaHref} variant={tier.highlighted ? "primary" : "secondary"} size="lg" className="w-full">
+
+                  {/* CTA */}
+                  <Button
+                    href={ctaHref}
+                    variant={tier.highlighted ? "primary" : "secondary"}
+                    size="lg"
+                    className="mt-auto w-full"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     {tier.ctaLabel}
                   </Button>
                 </Card>
@@ -77,8 +192,15 @@ export function PricingGrid() {
             );
           })}
         </div>
-        <RevealOnScroll delay={0.2} className="mt-16 text-center max-w-3xl mx-auto">
-          <p className="text-sm text-charcoal-500 leading-relaxed">{pricingDisclaimer}</p>
+
+        {/* Pricing disclaimer */}
+        <RevealOnScroll
+          delay={0.2}
+          className="mx-auto mt-16 max-w-3xl text-center"
+        >
+          <p className="text-sm leading-relaxed text-charcoal-500">
+            {pricingDisclaimer}
+          </p>
         </RevealOnScroll>
       </Container>
     </Section>

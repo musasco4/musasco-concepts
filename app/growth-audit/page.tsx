@@ -1,4 +1,7 @@
+"use client";
+
 import type { Metadata } from "next";
+import { useState } from "react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Container } from "@/components/ui/Container";
@@ -6,17 +9,14 @@ import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Section } from "@/components/ui/Section";
-import { CheckCircle2, ArrowRight, Target, TrendingUp, BarChart3 } from "lucide-react";
+import {
+  CheckCircle2,
+  ArrowRight,
+  Target,
+  TrendingUp,
+  BarChart3,
+} from "lucide-react";
 import Link from "next/link";
-
-export const metadata: Metadata = {
-  title: "Free Growth Audit | MUSASCO Concepts",
-  description:
-    "Get a free Growth Audit to identify where your business is leaking revenue and discover the specific systems needed to fix it. No obligation.",
-  alternates: {
-    canonical: "/growth-audit",
-  },
-};
 
 const AUDIT_STEPS = [
   {
@@ -55,38 +55,139 @@ const QUALIFIES = [
 ];
 
 export default function GrowthAuditPage() {
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    company: "",
+    message: "",
+  });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [status, setStatus] = useState<{
+    type: "success" | "error" | null;
+    message: string;
+  }>({
+    type: null,
+    message: "",
+  });
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+
+    setFormData((current) => ({
+      ...current,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    setIsSubmitting(true);
+    setStatus({
+      type: null,
+      message: "",
+    });
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          company: formData.company,
+          message: formData.message,
+          formType: "growth-audit",
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data?.error || "Email sending failed");
+      }
+
+      setStatus({
+        type: "success",
+        message:
+          "Your Growth Audit request has been received. We'll reach out within 24 hours on business days.",
+      });
+
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        company: "",
+        message: "",
+      });
+    } catch (error) {
+      console.error("Growth Audit submission error:", error);
+
+      setStatus({
+        type: "error",
+        message:
+          "We couldn't submit your request right now. Please try again in a moment.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <>
       <Header />
+
       <main id="main-content" className="w-full min-w-0">
-        
         {/* Hero */}
-        <section id="growth-audit-hero" className="relative w-full bg-charcoal-900 text-white pt-16 pb-20 lg:pt-24 lg:pb-28 overflow-hidden">
-          <div className="absolute inset-0 bg-grid-faint opacity-[0.03] pointer-events-none" aria-hidden="true" />
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-emerald-500/10 blur-[100px] rounded-full pointer-events-none" aria-hidden="true" />
-          
-          <Container className="relative z-10 max-w-3xl mx-auto text-center">
+        <section
+          id="growth-audit-hero"
+          className="relative w-full overflow-hidden bg-charcoal-900 pb-20 pt-16 text-white lg:pb-28 lg:pt-24"
+        >
+          <div
+            className="pointer-events-none absolute inset-0 bg-grid-faint opacity-[0.03]"
+            aria-hidden="true"
+          />
+
+          <div
+            className="pointer-events-none absolute left-1/2 top-0 h-[300px] w-[600px] -translate-x-1/2 rounded-full bg-emerald-500/10 blur-[100px]"
+            aria-hidden="true"
+          />
+
+          <Container className="relative z-10 mx-auto max-w-3xl text-center">
             <RevealOnScroll>
-              <p className="text-xs font-bold uppercase tracking-widest text-emerald-500 mb-4">
+              <p className="mb-4 text-xs font-bold uppercase tracking-widest text-emerald-500">
                 FREE • NO OBLIGATION
               </p>
+
               <h1 className="font-display text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl text-balance">
                 Find Out Where Your Growth Is Stalling.
               </h1>
             </RevealOnScroll>
+
             <RevealOnScroll delay={0.1}>
-              <p className="mt-6 text-lg text-charcoal-300 leading-relaxed max-w-2xl mx-auto">
-                A Growth Audit identifies exactly which part of your customer journey is leaking revenue — and gives you a clear, specific plan to fix it. No pressure, no obligation, just clarity.
+              <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-charcoal-300">
+                A Growth Audit identifies exactly which part of your customer
+                journey is leaking revenue — and gives you a clear, specific
+                plan to fix it. No pressure, no obligation, just clarity.
               </p>
             </RevealOnScroll>
+
             <RevealOnScroll delay={0.2}>
-              <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+              <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
                 <Button href="#audit-form" size="lg">
                   Start My Free Audit
                 </Button>
-                <Link 
-                  href="/pricing" 
-                  className="text-sm font-medium text-charcoal-400 hover:text-white transition-colors"
+
+                <Link
+                  href="/pricing"
+                  className="text-sm font-medium text-charcoal-400 transition-colors hover:text-white"
                 >
                   Already know what you need? See Pricing →
                 </Link>
@@ -97,27 +198,38 @@ export default function GrowthAuditPage() {
 
         {/* What We Assess */}
         <Section background="primary" ariaLabel="What we assess">
-          <Container className="max-w-5xl mx-auto">
-            <RevealOnScroll className="text-center mb-12 max-w-2xl mx-auto">
+          <Container className="mx-auto max-w-5xl">
+            <RevealOnScroll className="mx-auto mb-12 max-w-2xl text-center">
               <h2 className="font-display text-3xl font-bold tracking-tight text-charcoal-900 sm:text-4xl">
                 What We Look At
               </h2>
-              <p className="mt-4 text-charcoal-600 text-lg">
-                Every Growth Audit evaluates three core engines of your business.
+
+              <p className="mt-4 text-lg text-charcoal-600">
+                Every Growth Audit evaluates three core engines of your
+                business.
               </p>
             </RevealOnScroll>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-3 lg:gap-8">
               {AUDIT_STEPS.map((step, i) => (
                 <RevealOnScroll key={step.title} delay={i * 0.1}>
-                  <Card variant="flat" hover className="p-8 h-full flex flex-col">
-                    <div className="size-12 rounded-full bg-emerald-50 flex items-center justify-center mb-6">
-                      <step.icon className="size-6 text-emerald-600" aria-hidden="true" />
+                  <Card
+                    variant="flat"
+                    hover
+                    className="flex h-full flex-col p-8"
+                  >
+                    <div className="mb-6 flex size-12 items-center justify-center rounded-full bg-emerald-50">
+                      <step.icon
+                        className="size-6 text-emerald-600"
+                        aria-hidden="true"
+                      />
                     </div>
-                    <h3 className="font-display text-xl font-bold text-charcoal-900 mb-3">
+
+                    <h3 className="mb-3 font-display text-xl font-bold text-charcoal-900">
                       {step.title}
                     </h3>
-                    <p className="text-sm text-charcoal-600 leading-relaxed flex-1">
+
+                    <p className="flex-1 text-sm leading-relaxed text-charcoal-600">
                       {step.description}
                     </p>
                   </Card>
@@ -129,9 +241,9 @@ export default function GrowthAuditPage() {
 
         {/* What You Get */}
         <Section background="subtle" ariaLabel="What you get">
-          <Container className="max-w-3xl mx-auto">
+          <Container className="mx-auto max-w-3xl">
             <RevealOnScroll className="mb-10">
-              <h2 className="font-display text-3xl font-bold tracking-tight text-charcoal-900 sm:text-4xl text-center">
+              <h2 className="text-center font-display text-3xl font-bold tracking-tight text-charcoal-900 sm:text-4xl">
                 What You Get
               </h2>
             </RevealOnScroll>
@@ -139,9 +251,18 @@ export default function GrowthAuditPage() {
             <RevealOnScroll delay={0.1}>
               <div className="space-y-4">
                 {DELIVERABLES.map((item) => (
-                  <div key={item} className="flex items-start gap-4 p-4 rounded-lg bg-white border border-charcoal-100">
-                    <CheckCircle2 className="size-5 text-emerald-600 shrink-0 mt-0.5" aria-hidden="true" />
-                    <span className="text-base text-charcoal-700 leading-relaxed">{item}</span>
+                  <div
+                    key={item}
+                    className="flex items-start gap-4 rounded-lg border border-charcoal-100 bg-white p-4"
+                  >
+                    <CheckCircle2
+                      className="mt-0.5 size-5 shrink-0 text-emerald-600"
+                      aria-hidden="true"
+                    />
+
+                    <span className="text-base leading-relaxed text-charcoal-700">
+                      {item}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -151,19 +272,25 @@ export default function GrowthAuditPage() {
 
         {/* Who It Is For */}
         <Section background="primary" ariaLabel="Who this is for">
-          <Container className="max-w-3xl mx-auto">
+          <Container className="mx-auto max-w-3xl">
             <RevealOnScroll className="mb-10">
-              <h2 className="font-display text-3xl font-bold tracking-tight text-charcoal-900 sm:text-4xl text-center">
+              <h2 className="text-center font-display text-3xl font-bold tracking-tight text-charcoal-900 sm:text-4xl">
                 Who This Is For
               </h2>
             </RevealOnScroll>
 
             <RevealOnScroll delay={0.1}>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 {QUALIFIES.map((item) => (
                   <div key={item} className="flex items-start gap-3 p-4">
-                    <ArrowRight className="size-4 text-emerald-600 shrink-0 mt-1" aria-hidden="true" />
-                    <span className="text-sm text-charcoal-700 leading-relaxed">{item}</span>
+                    <ArrowRight
+                      className="mt-1 size-4 shrink-0 text-emerald-600"
+                      aria-hidden="true"
+                    />
+
+                    <span className="text-sm leading-relaxed text-charcoal-700">
+                      {item}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -172,62 +299,177 @@ export default function GrowthAuditPage() {
         </Section>
 
         {/* Audit Intake Form */}
-        <section id="audit-form" className="w-full bg-charcoal-900 text-white py-16 lg:py-24">
-          <Container className="max-w-2xl mx-auto">
-            <RevealOnScroll className="text-center mb-12">
+        <section
+          id="audit-form"
+          className="w-full bg-charcoal-900 py-16 text-white lg:py-24"
+        >
+          <Container className="mx-auto max-w-2xl">
+            <RevealOnScroll className="mb-12 text-center">
               <h2 className="font-display text-3xl font-bold tracking-tight text-white sm:text-4xl">
                 Ready to Start?
               </h2>
-              <p className="mt-4 text-charcoal-300 text-lg">
-                Tell us a bit about your business and we&apos;ll reach out within 24 hours to schedule your free Growth Audit.
+
+              <p className="mt-4 text-lg text-charcoal-300">
+                Tell us a bit about your business and we&apos;ll reach out
+                within 24 hours to schedule your free Growth Audit.
               </p>
             </RevealOnScroll>
 
             <RevealOnScroll delay={0.1}>
-              <Card variant="raised" className="p-6 sm:p-8 lg:p-10 bg-white text-charcoal-900">
-                <form action="/api/contact" method="POST" className="space-y-5">
-                  <input type="hidden" name="businessType" value="Growth Audit Request" />
-                  
+              <Card
+                variant="raised"
+                className="bg-white p-6 text-charcoal-900 sm:p-8 lg:p-10"
+              >
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  {/* Status message */}
+                  {status.type && (
+                    <div
+                      role={status.type === "error" ? "alert" : "status"}
+                      className={
+                        status.type === "success"
+                          ? "rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800"
+                          : "rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+                      }
+                    >
+                      <div className="flex items-start gap-3">
+                        {status.type === "success" ? (
+                          <CheckCircle2
+                            className="mt-0.5 size-5 shrink-0 text-emerald-600"
+                            aria-hidden="true"
+                          />
+                        ) : (
+                          <span className="mt-0.5 font-bold">!</span>
+                        )}
+
+                        <span>{status.message}</span>
+                      </div>
+                    </div>
+                  )}
+
                   <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                     <div className="space-y-2">
-                      <label htmlFor="audit-firstName" className="text-sm font-medium text-charcoal-900">First Name *</label>
-                      <input id="audit-firstName" name="firstName" required className="w-full rounded-md border border-charcoal-200 px-3 py-2.5 text-sm focus:border-emerald-600 focus:outline-none focus:ring-1 focus:ring-emerald-600" placeholder="Jane" />
+                      <label
+                        htmlFor="audit-firstName"
+                        className="text-sm font-medium text-charcoal-900"
+                      >
+                        First Name *
+                      </label>
+
+                      <input
+                        id="audit-firstName"
+                        name="firstName"
+                        value={formData.firstName}
+                        onChange={handleChange}
+                        required
+                        autoComplete="given-name"
+                        className="w-full rounded-md border border-charcoal-200 px-3 py-2.5 text-sm focus:border-emerald-600 focus:outline-none focus:ring-1 focus:ring-emerald-600"
+                        placeholder="Jane"
+                      />
                     </div>
+
                     <div className="space-y-2">
-                      <label htmlFor="audit-lastName" className="text-sm font-medium text-charcoal-900">Last Name *</label>
-                      <input id="audit-lastName" name="lastName" required className="w-full rounded-md border border-charcoal-200 px-3 py-2.5 text-sm focus:border-emerald-600 focus:outline-none focus:ring-1 focus:ring-emerald-600" placeholder="Doe" />
+                      <label
+                        htmlFor="audit-lastName"
+                        className="text-sm font-medium text-charcoal-900"
+                      >
+                        Last Name *
+                      </label>
+
+                      <input
+                        id="audit-lastName"
+                        name="lastName"
+                        value={formData.lastName}
+                        onChange={handleChange}
+                        required
+                        autoComplete="family-name"
+                        className="w-full rounded-md border border-charcoal-200 px-3 py-2.5 text-sm focus:border-emerald-600 focus:outline-none focus:ring-1 focus:ring-emerald-600"
+                        placeholder="Doe"
+                      />
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <label htmlFor="audit-email" className="text-sm font-medium text-charcoal-900">Email *</label>
-                    <input id="audit-email" name="email" type="email" required className="w-full rounded-md border border-charcoal-200 px-3 py-2.5 text-sm focus:border-emerald-600 focus:outline-none focus:ring-1 focus:ring-emerald-600" placeholder="jane@company.com" />
+                    <label
+                      htmlFor="audit-email"
+                      className="text-sm font-medium text-charcoal-900"
+                    >
+                      Email *
+                    </label>
+
+                    <input
+                      id="audit-email"
+                      name="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                      autoComplete="email"
+                      className="w-full rounded-md border border-charcoal-200 px-3 py-2.5 text-sm focus:border-emerald-600 focus:outline-none focus:ring-1 focus:ring-emerald-600"
+                      placeholder="jane@company.com"
+                    />
                   </div>
 
                   <div className="space-y-2">
-                    <label htmlFor="audit-company" className="text-sm font-medium text-charcoal-900">Company / Business Name</label>
-                    <input id="audit-company" name="company" className="w-full rounded-md border border-charcoal-200 px-3 py-2.5 text-sm focus:border-emerald-600 focus:outline-none focus:ring-1 focus:ring-emerald-600" placeholder="Your Business Name" />
+                    <label
+                      htmlFor="audit-company"
+                      className="text-sm font-medium text-charcoal-900"
+                    >
+                      Company / Business Name
+                    </label>
+
+                    <input
+                      id="audit-company"
+                      name="company"
+                      value={formData.company}
+                      onChange={handleChange}
+                      autoComplete="organization"
+                      className="w-full rounded-md border border-charcoal-200 px-3 py-2.5 text-sm focus:border-emerald-600 focus:outline-none focus:ring-1 focus:ring-emerald-600"
+                      placeholder="Your Business Name"
+                    />
                   </div>
 
                   <div className="space-y-2">
-                    <label htmlFor="audit-message" className="text-sm font-medium text-charcoal-900">What&apos;s your biggest growth challenge right now? *</label>
-                    <textarea id="audit-message" name="message" required rows={4} className="w-full rounded-md border border-charcoal-200 px-3 py-2.5 text-sm focus:border-emerald-600 focus:outline-none focus:ring-1 focus:ring-emerald-600 resize-none" placeholder="Tell us briefly what's holding your growth back..." />
+                    <label
+                      htmlFor="audit-message"
+                      className="text-sm font-medium text-charcoal-900"
+                    >
+                      What&apos;s your biggest growth challenge right now? *
+                    </label>
+
+                    <textarea
+                      id="audit-message"
+                      name="message"
+                      value={formData.message}
+                      onChange={handleChange}
+                      required
+                      rows={4}
+                      className="w-full resize-none rounded-md border border-charcoal-200 px-3 py-2.5 text-sm focus:border-emerald-600 focus:outline-none focus:ring-1 focus:ring-emerald-600"
+                      placeholder="Tell us briefly what's holding your growth back..."
+                    />
                   </div>
 
-                  <Button type="submit" size="lg" className="w-full">
-                    Request My Free Growth Audit
+                  <Button
+                    type="submit"
+                    size="lg"
+                    className="w-full"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting
+                      ? "Submitting Request..."
+                      : "Request My Free Growth Audit"}
                   </Button>
 
-                  <p className="text-xs text-charcoal-500 text-center mt-4">
-                    No obligation. We typically respond within 24 hours on business days.
+                  <p className="mt-4 text-center text-xs text-charcoal-500">
+                    No obligation. We typically respond within 24 hours on
+                    business days.
                   </p>
                 </form>
               </Card>
             </RevealOnScroll>
           </Container>
         </section>
-
       </main>
+
       <Footer />
     </>
   );

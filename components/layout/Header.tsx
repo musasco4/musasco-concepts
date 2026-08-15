@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
+
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { cn } from "@/lib/utils";
@@ -21,43 +22,30 @@ export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
 
-  /* =========================================================
-     SCROLL DETECTION
-     ========================================================= */
   useEffect(() => {
-    const onScroll = () => {
+    const handleScroll = () => {
       setScrolled(window.scrollY > 40);
     };
 
-    onScroll();
+    handleScroll();
 
-    window.addEventListener("scroll", onScroll, {
+    window.addEventListener("scroll", handleScroll, {
       passive: true,
     });
 
     return () => {
-      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
-  /* =========================================================
-     LOCK BODY SCROLL WHEN MOBILE MENU IS OPEN
-     ========================================================= */
   useEffect(() => {
-    if (mobileOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+    document.body.style.overflow = mobileOpen ? "hidden" : "";
 
     return () => {
       document.body.style.overflow = "";
     };
   }, [mobileOpen]);
 
-  /* =========================================================
-     ESCAPE KEY CLOSES MOBILE MENU
-     ========================================================= */
   useEffect(() => {
     if (!mobileOpen) return;
 
@@ -74,97 +62,152 @@ export function Header() {
     };
   }, [mobileOpen]);
 
-  /* =========================================================
-     ACTIVE NAVIGATION
-     ========================================================= */
   const isActive = (href: string) => {
-    if (href === "/") {
+    const basePath = href.split("#")[0];
+
+    if (basePath === "/") {
       return pathname === "/";
     }
-
-    const basePath = href.split("#")[0];
 
     return pathname.startsWith(basePath);
   };
 
+  const heroHeader = !scrolled;
+
   return (
     <>
-      {/* =====================================================
+      {/* =========================================================
           DESKTOP HEADER
-          ALWAYS WHITE
-          ===================================================== */}
+          ========================================================= */}
       <header
         className={cn(
-          "hidden lg:block sticky top-0 z-50 w-full bg-white transition-all duration-300 ease-[var(--ease-standard)]",
-          scrolled
-            ? "backdrop-blur-md shadow-[var(--shadow-card-sm)] border-b border-charcoal-100"
-            : "border-b border-transparent"
+          "fixed inset-x-0 top-0 z-50 hidden w-full lg:block",
+          "transition-all duration-300",
+          heroHeader
+            ? "bg-transparent"
+            : "border-b border-charcoal-100 bg-white/95 shadow-[var(--shadow-card-sm)] backdrop-blur-md"
         )}
       >
-        <Container className="flex h-[72px] items-center gap-8">
-          {/* =================================================
-              BRAND
-              ================================================= */}
-          <Link
-            href="/"
-            className="shrink-0 font-display font-extrabold text-lg tracking-tight whitespace-nowrap text-charcoal-900 transition-colors duration-300"
-            aria-label="MUSASCO Home"
+        <Container>
+          <div
+            className="
+              grid
+              h-[76px]
+              grid-cols-[auto_minmax(0,1fr)_auto]
+              items-center
+              gap-6
+              xl:gap-8
+            "
           >
-            MUSASCO
-          </Link>
-
-          {/* =================================================
-              DESKTOP NAVIGATION
-              ================================================= */}
-          <nav
-            aria-label="Primary"
-            className="flex items-center gap-1 xl:gap-2 shrink-0 ml-2"
-          >
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                className={cn(
-                  "px-3 py-2 rounded-md text-sm font-medium whitespace-nowrap transition-colors",
-                  isActive(link.href)
-                    ? "text-emerald-600 bg-emerald-50"
-                    : "text-charcoal-600 hover:text-charcoal-900 hover:bg-charcoal-50"
-                )}
-              >
-                {link.name}
-              </Link>
-            ))}
-          </nav>
-
-          {/* =================================================
-              DESKTOP CTAs
-              ================================================= */}
-          <div className="ml-auto flex items-center gap-3 shrink-0 whitespace-nowrap">
+            {/* =====================================================
+                OFFICIAL LOGO
+                ===================================================== */}
             <Link
-              href="/growth-audit"
-              className="text-sm font-medium text-emerald-600 hover:text-emerald-700 hover:underline underline-offset-4 transition-colors"
+              href="/"
+              aria-label="Musasco Home"
+              className="flex shrink-0 items-center"
             >
-              Free Growth Audit
+              {/* Official full logo — never recreate the wordmark */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={
+                  heroHeader
+                    ? "/m-logo-color.svg"
+                    : "/m-logo-mix.svg"
+                }
+                alt="Musasco"
+                width={220}
+                height={52}
+                className="
+                  block
+                  h-[42px]
+                  w-auto
+                  max-w-[220px]
+                  object-contain
+                "
+              />
             </Link>
 
-            <Button
-              href="/pricing"
-              size="default"
-              className="whitespace-nowrap"
+            {/* =====================================================
+                NAVIGATION
+                ===================================================== */}
+            <nav
+              aria-label="Primary navigation"
+              className="min-w-0"
             >
-              Build Your Growth System
-            </Button>
+              <div
+                className="
+                  flex
+                  items-center
+                  justify-start
+                  gap-0.5
+                  xl:gap-1
+                "
+              >
+                {NAV_LINKS.map((link) => {
+                  const active = isActive(link.href);
+
+                  return (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className={cn(
+                        "whitespace-nowrap rounded-md",
+                        "px-2.5 py-2 xl:px-3",
+                        "text-[13px] font-medium",
+                        "transition-colors duration-200",
+                        heroHeader
+                          ? active
+                            ? "bg-white/10 text-white"
+                            : "text-white/85 hover:bg-white/10 hover:text-white"
+                          : active
+                            ? "bg-emerald-50 text-emerald-700"
+                            : "text-charcoal-600 hover:bg-charcoal-50 hover:text-charcoal-900"
+                      )}
+                    >
+                      {link.name}
+                    </Link>
+                  );
+                })}
+              </div>
+            </nav>
+
+            {/* =====================================================
+                ACTIONS
+                ===================================================== */}
+            <div className="flex shrink-0 items-center gap-3">
+              <Link
+                href="/growth-audit"
+                className={cn(
+                  "whitespace-nowrap",
+                  "text-[13px] font-semibold",
+                  "transition-colors duration-200",
+                  heroHeader
+                    ? "text-emerald-300 hover:text-white"
+                    : "text-emerald-600 hover:text-emerald-700"
+                )}
+              >
+                Free Growth Audit
+              </Link>
+
+              <Button
+                href="/pricing"
+                size="default"
+                className="whitespace-nowrap"
+              >
+                Build Your Growth System
+              </Button>
+            </div>
           </div>
         </Container>
       </header>
 
-      {/* =====================================================
+      {/* =========================================================
           MOBILE HEADER
-          TRANSPARENT OUTER + DARK PILL
-          ===================================================== */}
-      <div className="lg:hidden fixed inset-x-0 top-0 z-[60] pointer-events-none">
+          ========================================================= */}
+      <div className="pointer-events-none fixed inset-x-0 top-0 z-[60] lg:hidden">
         <div
-          className="px-4 pt-3 pb-1 pointer-events-auto"
+          className="pointer-events-auto px-4 pb-1 pt-3"
           style={{
             paddingTop:
               "max(0.75rem, env(safe-area-inset-top, 0px))",
@@ -172,37 +215,57 @@ export function Header() {
         >
           <div
             className={cn(
-              "flex items-center justify-between rounded-full px-5 py-2.5 transition-all duration-300",
+              "flex items-center justify-between",
+              "rounded-full px-5 py-2.5",
+              "border border-white/10",
+              "transition-all duration-300",
               scrolled || mobileOpen
-                ? "bg-charcoal-900/95 backdrop-blur-md shadow-lg border border-white/10"
-                : "bg-charcoal-900/80 backdrop-blur-sm border border-white/5"
+                ? "bg-charcoal-900/95 shadow-lg backdrop-blur-md"
+                : "bg-charcoal-900/80 backdrop-blur-sm"
             )}
           >
-            {/* Mobile Brand */}
+            {/* Official mobile mark */}
             <Link
               href="/"
-              className="shrink-0 font-display font-extrabold text-sm tracking-tight whitespace-nowrap"
-              aria-label="MUSASCO Home"
+              aria-label="Musasco Home"
+              className="flex shrink-0 items-center"
             >
-              <span className="text-white">
-                MUSASCO
-              </span>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/m-mark-light.svg"
+                alt="Musasco"
+                width={34}
+                height={34}
+                className="block h-7 w-7 object-contain"
+              />
             </Link>
 
-            {/* Mobile Menu Toggle */}
+            {/* Menu button */}
             <button
               type="button"
-              className="flex items-center justify-center size-10 rounded-full text-white hover:bg-white/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
               aria-expanded={mobileOpen}
               aria-controls="mobile-nav"
               aria-label={
                 mobileOpen
-                  ? "Close menu"
-                  : "Open menu"
+                  ? "Close navigation menu"
+                  : "Open navigation menu"
               }
               onClick={() =>
                 setMobileOpen((value) => !value)
               }
+              className="
+                flex
+                size-10
+                items-center
+                justify-center
+                rounded-full
+                text-white
+                transition-colors
+                hover:bg-white/10
+                focus-visible:outline-none
+                focus-visible:ring-2
+                focus-visible:ring-emerald-500
+              "
             >
               {mobileOpen ? (
                 <X
@@ -220,92 +283,123 @@ export function Header() {
         </div>
       </div>
 
-      {/* =====================================================
-          MOBILE HEADER SPACER
-          ===================================================== */}
+      {/* Mobile header spacer */}
       <div
-        className="lg:hidden h-[72px]"
+        className="h-[72px] lg:hidden"
         aria-hidden="true"
       />
 
-      {/* =====================================================
+      {/* =========================================================
           MOBILE FULL-SCREEN NAVIGATION
-          ===================================================== */}
+          ========================================================= */}
       {mobileOpen && (
         <div
           id="mobile-nav"
-          className="lg:hidden fixed inset-0 z-[50] bg-charcoal-900/95 backdrop-blur-sm text-white overflow-y-auto"
+          className="
+            fixed
+            inset-0
+            z-[50]
+            overflow-y-auto
+            bg-charcoal-900/95
+            text-white
+            backdrop-blur-sm
+            lg:hidden
+          "
           style={{
             paddingTop:
               "env(safe-area-inset-top, 0px)",
           }}
-          onClick={(event) => {
-            /*
-             * Clicking the empty background closes the menu.
-             * Clicking navigation content does not.
-             */
-            if (
-              event.target === event.currentTarget
-            ) {
-              setMobileOpen(false);
-            }
-          }}
+          onClick={() => setMobileOpen(false)}
         >
-          {/* Spacer for mobile header pill */}
           <div
-            className="h-[72px] shrink-0"
-            aria-hidden="true"
-          />
+            className="min-h-full"
+            onClick={(event) =>
+              event.stopPropagation()
+            }
+          >
+            <div className="h-[72px]" />
 
-          <Container className="py-8 flex flex-col gap-5">
-            {/* Navigation Label */}
-            <p className="text-xs font-bold uppercase tracking-widest text-charcoal-500 mb-1">
-              Navigation
-            </p>
+            <Container className="flex flex-col gap-5 py-8">
+              <div className="mb-1">
+                {/* Official full logo inside menu */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/m-logo-dark.svg"
+                  alt="Musasco"
+                  width={190}
+                  height={46}
+                  className="h-9 w-auto"
+                />
+              </div>
 
-            {/* Navigation Links */}
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                onClick={() =>
-                  setMobileOpen(false)
-                }
-                className={cn(
-                  "text-lg font-semibold py-3 border-b border-white/10 transition-colors",
-                  isActive(link.href)
-                    ? "text-emerald-400"
-                    : "text-white hover:text-emerald-400"
-                )}
+              <p
+                className="
+                  text-xs
+                  font-bold
+                  uppercase
+                  tracking-[0.16em]
+                  text-charcoal-500
+                "
               >
-                {link.name}
-              </Link>
-            ))}
+                Navigation
+              </p>
 
-            {/* Mobile CTAs */}
-            <div className="mt-6 flex flex-col gap-4 pt-6 border-t border-white/20">
-              <Button
-                href="/pricing"
-                variant="primary"
-                className="w-full"
-                onClick={() =>
-                  setMobileOpen(false)
-                }
-              >
-                Build Your Growth System
-              </Button>
+              {NAV_LINKS.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setMobileOpen(false)}
+                  className={cn(
+                    "border-b border-white/10 py-3",
+                    "text-lg font-semibold",
+                    "transition-colors",
+                    isActive(link.href)
+                      ? "text-emerald-400"
+                      : "text-white hover:text-emerald-400"
+                  )}
+                >
+                  {link.name}
+                </Link>
+              ))}
 
-              <Link
-                href="/growth-audit"
-                onClick={() =>
-                  setMobileOpen(false)
-                }
-                className="text-center text-sm font-medium text-emerald-300 hover:text-emerald-200 transition-colors py-2"
+              <div
+                className="
+                  mt-6
+                  flex
+                  flex-col
+                  gap-4
+                  border-t
+                  border-white/20
+                  pt-6
+                "
               >
-                or start with a free Growth Audit
-              </Link>
-            </div>
-          </Container>
+                <Button
+                  href="/pricing"
+                  variant="primary"
+                  className="w-full"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  Build Your Growth System
+                </Button>
+
+                <Link
+                  href="/growth-audit"
+                  onClick={() => setMobileOpen(false)}
+                  className="
+                    py-2
+                    text-center
+                    text-sm
+                    font-medium
+                    text-emerald-300
+                    transition-colors
+                    hover:text-emerald-200
+                  "
+                >
+                  or start with a free Growth Audit
+                </Link>
+              </div>
+            </Container>
+          </div>
         </div>
       )}
     </>

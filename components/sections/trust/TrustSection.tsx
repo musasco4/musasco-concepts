@@ -4,7 +4,6 @@ import { Section } from "@/components/ui/Section";
 import { Container } from "@/components/ui/Container";
 import { Card } from "@/components/ui/Card";
 import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
-
 import { Carousel } from "@/components/ui/Carousel";
 import { trustSection, type TestimonialSlot } from "@/lib/content/homepage";
 
@@ -25,28 +24,19 @@ function Stars({ count }: { count: number }) {
 function TestimonialCard({ item }: { item: TestimonialSlot }) {
   return (
     <Card variant="raised" className="p-8 text-center h-full flex flex-col items-center justify-center gap-4">
-      <Stars count={item.stars} />
-      <p className="text-charcoal-600 italic">&ldquo;{item.quote}&rdquo;</p>
+      {item.stars > 0 && <Stars count={item.stars} />}
+      <p className="text-charcoal-700 text-lg leading-relaxed max-w-lg">
+        &ldquo;{item.quote}&rdquo;
+      </p>
+      {item.author && (
+        <p className="text-sm font-semibold text-charcoal-900">
+          {item.author}
+          {item.role && <span className="text-charcoal-500 font-normal"> — {item.role}</span>}
+        </p>
+      )}
     </Card>
   );
 }
-
-/**
- * TrustSection — redesigned this round: placeholder logo boxes replaced
- * with an infinite marquee of abstract logo marks (see `LogoMark.tsx` for
- * why these are abstract, not fake company names); the single testimonial
- * slot is now a proper stars-plus-quote-only card (no name, no company,
- * no headline, exactly as specified), ready to become a carousel the
- * moment more than one real testimonial exists.
- *
- * Statistics (the third sub-part of the "redesign the Trust section"
- * brief) live in `ResultsStrip`, not here — that's a deliberate mapping
- * decision, not an oversight: this project's stats section already
- * existed as its own homepage section before this round, and duplicating
- * the same four numbers in two places would work against "every section
- * should feel different," not for it.
- */
-
 
 export function TrustSection() {
   return (
@@ -71,7 +61,7 @@ export function TrustSection() {
 
         <RevealOnScroll delay={0.2} className="mt-12 max-w-md mx-auto">
           {trustSection.testimonials.length > 1 ? (
-            <Carousel ariaLabel="Client testimonials">
+            <Carousel ariaLabel="Client perspectives">
               {trustSection.testimonials.map((t, i) => (
                 <TestimonialCard key={i} item={t} />
               ))}

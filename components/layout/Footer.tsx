@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { MessageCircle, Mail, Phone, Contact as ContactIcon } from "lucide-react";
 import { Container } from "@/components/ui/Container";
+import { CONTACT } from "@/lib/config/contact";
 
 function InstagramIcon({ className }: { className?: string }) {
   return (
@@ -24,7 +25,7 @@ function LinkedinIcon({ className }: { className?: string }) {
   );
 }
 
-const COLUMNS = [
+const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
   {
     title: "Solutions",
     links: [
@@ -56,11 +57,11 @@ const COLUMNS = [
 
 const CONNECT = [
   { label: "Contact", href: "/contact", icon: ContactIcon },
-  { label: "WhatsApp", href: "https://wa.me/2349056935204", icon: MessageCircle },
-  { label: "Email", href: "mailto:musasco4wealth@gmail.com", icon: Mail },
-  { label: "Phone", href: "tel:+2349056935204", icon: Phone },
-  { label: "Instagram", href: "https://instagram.com/musascoconcepts", icon: InstagramIcon },
-  { label: "LinkedIn", href: "https://linkedin.com/company/musascoconcepts", icon: LinkedinIcon },
+  { label: "WhatsApp", href: CONTACT.whatsapp.href, icon: MessageCircle },
+  { label: "Email", href: CONTACT.email.mailto, icon: Mail },
+  { label: "Phone", href: CONTACT.phone.tel, icon: Phone },
+  { label: "Instagram", href: CONTACT.social.instagram, icon: InstagramIcon },
+  { label: "LinkedIn", href: CONTACT.social.linkedin, icon: LinkedinIcon },
 ];
 
 export function Footer() {
@@ -110,7 +111,7 @@ export function Footer() {
       </Container>
       <div className="border-t border-white/10">
         <Container className="py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-charcoal-400">
-          <p>© {new Date().getFullYear()} MUSASCO Concepts. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Musasco. All rights reserved.</p>
         </Container>
       </div>
     </footer>
